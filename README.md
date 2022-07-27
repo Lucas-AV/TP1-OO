@@ -6,3 +6,7 @@ Repositório destinado ao trabalho de OO do primeiro semestre
 | [Ana Carolina Costa Cesar](https://github.com/CarolCoCe) |190101750|
 | [Pedro Sampaio Dias](https://github.com/PedroSampaioDias) |211043745|
 | [Paulo Renato Soares Paes](https://github.com/https://github.com/Lizdtre) |211029512|
+## Parte 1
+Entrega dos digramas de classe e objeto utilizando a ferramenta drawio
+## Parte 2
+## Parte 3
