@@ -1,5 +1,5 @@
 # TP1-OO
-Repositório destinado ao trabalho de OO do primeiro semestre
+Repositório destinado ao trabalho de OO do semestre 2022.2
 | Integrante | Matrícula |
 | --------- | --------- |
 | [Lucas Alves Vilela](https://github.com/Lucas-AV) |211062141|
