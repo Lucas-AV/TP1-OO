@@ -1,5 +1,5 @@
-# TP1-OO
-Repositório destinado ao trabalho de OO do semestre 2022.2
+# TP1-OO (GRUPO 4)
+Repositório destinado ao trabalho de OO do semestre 2022.2 (GRUPO 4)
 | Integrante | Matrícula |
 | --------- | --------- |
 | [Lucas Alves Vilela](https://github.com/Lucas-AV) |211062141|
