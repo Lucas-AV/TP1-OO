@@ -9,4 +9,5 @@ Repositório destinado ao trabalho de OO do semestre 2022.2 (GRUPO 4)
 ## Parte 1
 Entrega dos digramas de classe e objeto utilizando a ferramenta drawio.
 ## Parte 2
+Entrega da primeira parte do código (PASTA CODES)
 ## Parte 3
