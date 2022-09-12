@@ -121,168 +121,134 @@ class Main {
 					int opcaoEstacionamento = inputMenu("Estacionamentos", "-=-", 15, itemsEstacionamento);
 					
 					if (opcaoEstacionamento == 0) { 
+						float porcDiariaNoturna, valorDiariaDiurna, valorFracaoQuinze, porcHoraCheia, valorMensalista;
+						int capacidade;
+						String nome;
+
 						cls();
 						title("Estacionamento", "-=-", 15);
-						String nome = input("Insira o nome do estacionamento\n> ");
+						nome = input("Insira o nome do estacionamento\n> ");
 						try {
 							validarInputString(nome);
 						} catch (DescricaoEmBrancoException e) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						}
 						
-						int capacidade = Integer.parseInt(input("Insira a capacidade do estacionamento\n> "));
+						capacidade = int_input("Insira a capacidade do estacionamento\n> ");
 						try {
 							validarInputString(String.valueOf(capacidade));
 							validarInputNum(capacidade);
 						} catch (DescricaoEmBrancoException e) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (ValorAcessoInvalidoException e2) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (NumberFormatException e1) {
-							print("A entrada deve ser um número!!!\n");
-							decor("-=-", 15);
-							ok();
+							println("A entrada deve ser um número!!!");
 							break;
 						} 
 						
-						float valorDiariaDiurna = Float.parseFloat(input("Insira o valor da diaria\n> "));
+						valorDiariaDiurna = float_input("Insira o valor da diaria\n> ");
 						try {
 							validarInputString(String.valueOf(valorDiariaDiurna));
 							validarInputNum(valorDiariaDiurna);
 						} catch (DescricaoEmBrancoException e) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (ValorAcessoInvalidoException e2) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (NumberFormatException e1) {
-							print("A entrada deve ser um número!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
 							break;
 						} 
 						
-						float porcDiariaNoturna = Float.parseFloat(input("Insira a porcentagem da diária noturna\n> "));
+						porcDiariaNoturna = float_input("Insira a porcentagem da diária noturna\n> ");
 						try {
 							validarInputString(String.valueOf(porcDiariaNoturna));
 							validarInputNum(porcDiariaNoturna);
 						} catch (DescricaoEmBrancoException e) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (ValorAcessoInvalidoException e2) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (NumberFormatException e1) {
-							print("A entrada deve ser um número!!!\n");
-							decor("-=-", 15);
-							ok();
+							println("A entrada deve ser um número!!!");
 							break;
 						} 
 						
-						float valorFracaoQuinze = Float.parseFloat(input("Insira o valor da Fração de Quinze minutos:\n> "));
+						valorFracaoQuinze = float_input("Insira o valor da Fração de Quinze minutos:\n> ");
 						try {
 							validarInputString(String.valueOf(valorFracaoQuinze));
 							validarInputNum(valorFracaoQuinze);
 						} catch (DescricaoEmBrancoException e) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (ValorAcessoInvalidoException e2) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (NumberFormatException e1) {
-							print("A entrada deve ser um número!!!\n");
-							decor("-=-", 15);
-							ok();
+							println("A entrada deve ser um número!!!");
 							break;
 						} 
 						
-						float porcHoraCheia = Float.parseFloat(input("Insira o valor do desconto da hora cheia\n> "));
+						porcHoraCheia = float_input("Insira o valor do desconto da hora cheia\n> ");
 						try {
 							validarInputString(String.valueOf(porcHoraCheia));
 							validarInputNum(valorFracaoQuinze);
 						} catch (DescricaoEmBrancoException e) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (ValorAcessoInvalidoException e2) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (NumberFormatException e1) {
-							print("A entrada deve ser um número!!!\n");
-							decor("-=-", 15);
-							ok();
+							println("A entrada deve ser um número!!!");
 							break;
 						} 
 						
-						float valorMensalista = Float.parseFloat(input("Insira o valor Mensalista\n> "));
+						valorMensalista = float_input("Insira o valor Mensalista\n> ");
 						try {
 							validarInputString(String.valueOf(valorMensalista));
 							validarInputNum(valorFracaoQuinze);
 						} catch (DescricaoEmBrancoException e) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (ValorAcessoInvalidoException e2) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						} catch (NumberFormatException e1) {
-							print("A entrada deve ser um número!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true,"A entrada deve ser um número!!!","-=-", 15);
 							break;
 						} 
 						
-						Estacionamento novoEstacionamento = new Estacionamento(nome, capacidade, valorDiariaDiurna, porcDiariaNoturna,
-								valorFracaoQuinze, porcHoraCheia, valorMensalista);
-	
+						Estacionamento novoEstacionamento = new Estacionamento(
+							nome, 
+							capacidade, 
+							valorDiariaDiurna, 
+							porcDiariaNoturna,
+							valorFracaoQuinze, 
+							porcHoraCheia, 
+							valorMensalista
+						);
 						estacionamento.add(novoEstacionamento);
 	
 						decor("-=-", 15);
 						ok();
 					} else if (opcaoEstacionamento == 1) { 
 						cls();
-						
 						title("Estacionamento", "-=-", 15);
-	
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
 							break;
 						}
 						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							System.out.println(estacionamento.get(i).getNome());
-						}
+						printAllEstacionamentos(estacionamento);
 							
 						decor("-=-", 15);
 						
@@ -291,9 +257,7 @@ class Main {
 						try {
 							verificarListEstacionamentosPeloNome(estacionamento, nome2exclude);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("O Estacionamento digitado não existe!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
 							break;
 						}
 						
@@ -313,15 +277,12 @@ class Main {
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
+
 							break;
 						}
 						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							System.out.println(estacionamento.get(i).getNome());
-						}
+						printAllEstacionamentos(estacionamento);
 						
 						decor("-=-", 15);
 						ok();
@@ -332,15 +293,11 @@ class Main {
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
 							break;
 						}
 						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							System.out.println(estacionamento.get(i).getNome());
-						}
+						printAllEstacionamentos(estacionamento);
 						
 						decor("-=-", 15);
 						String objeto2edit = input("Insira o nome do estacionamento\n> ");
@@ -348,9 +305,7 @@ class Main {
 						try {
 							verificarListEstacionamentosPeloNome(estacionamento, objeto2edit);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("O Estacionamento digitado não existe!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
 							break;
 						}
 	
@@ -367,7 +322,7 @@ class Main {
 						
 	
 						printMenu("Estacionamentos Edicao", "-=-", 15, itemsEdicao);
-						int opcaoEdicao = Integer.parseInt(input("O que deseja editar\n> "));
+						int opcaoEdicao = int_input("O que deseja editar\n> ");
 						switch (opcaoEdicao) {
 							case 0:
 								try {
@@ -375,164 +330,127 @@ class Main {
 									validarInputString(nome2edit);
 									estacionamento.get(index).setNome(nome2edit);
 								} catch (DescricaoEmBrancoException e) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								}
 								
 								break;
 							case 1:
 							
 								try {
-									int capacidade2edit = Integer.parseInt(input("Nova capacidade\n> "));
+									int capacidade2edit = int_input("Nova capacidade\n> ");
 									validarInputString(String.valueOf(capacidade2edit));
 									validarInputNum(capacidade2edit);
 									estacionamento.get(index).setCapacidade(capacidade2edit);
 								} catch (DescricaoEmBrancoException e) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 								} catch (ValorAcessoInvalidoException e2) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 								} catch (NumberFormatException e1) {
-									print("A entrada deve ser um número!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
 									break;
 								} 
 								
 								break;
 							case 2:
-								float valorDiariaDiurna2edit = Float.parseFloat(input("Novo Valor da Diaria Diurna: "));
+								float valorDiariaDiurna2edit = float_input("Novo Valor da Diaria Diurna: ");
 								
 								try {
 									validarInputString(String.valueOf(valorDiariaDiurna2edit));
 									validarInputNum(valorDiariaDiurna2edit);
 								} catch (DescricaoEmBrancoException e) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 								} catch (ValorAcessoInvalidoException e2) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 								} catch (NumberFormatException e1) {
-									print("A entrada deve ser um número!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
 									break;
 								} 
 								
 								estacionamento.get(index).setValorDiariaDiurna(valorDiariaDiurna2edit);
 								break;
 							case 3:
-								float porcDiariaNoturna2edit = Float.parseFloat(input("Nova Porcentagem Diaria Noturna: "));
+								float porcDiariaNoturna2edit = float_input("Nova Porcentagem Diaria Noturna: ");
 								
 								try {
 									validarInputString(String.valueOf(porcDiariaNoturna2edit));
 									validarInputNum(porcDiariaNoturna2edit);
 								} catch (DescricaoEmBrancoException e) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 								} catch (ValorAcessoInvalidoException e2) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
+
 									break;
 								} catch (NumberFormatException e1) {
-									print("A entrada deve ser um número!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
 									break;
 								} 
 								
 								estacionamento.get(index).setPorcDiariaNoturna(porcDiariaNoturna2edit);
 								break;
 							case 4:
-								float valorFracaoQuinze2edit = Float.parseFloat(input("Novo Valor da Fracao Quinze: "));
+								float valorFracaoQuinze2edit = float_input("Novo Valor da Fracao Quinze: ");
 								
 								try {
 									validarInputString(String.valueOf(valorFracaoQuinze2edit));
 									validarInputNum(valorFracaoQuinze2edit);
 								}catch (DescricaoEmBrancoException e) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 								} catch (ValorAcessoInvalidoException e2) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 								} catch (NumberFormatException e1) {
-									print("A entrada deve ser um número!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
 									break;
 								} 
 								
 								estacionamento.get(index).setValorFracaoQuinze(valorFracaoQuinze2edit);
 								break;
 							case 5:
-								float porcHoraCheia2edit = Float.parseFloat(input("Nova Porcentagem Hora Cheia: "));
+								float porcHoraCheia2edit = float_input("Nova Porcentagem Hora Cheia: ");
 								
 								try {
 									validarInputString(String.valueOf(porcHoraCheia2edit));
 									validarInputNum(porcHoraCheia2edit);
 								} catch (DescricaoEmBrancoException e) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 								} catch (ValorAcessoInvalidoException e2) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 								} catch (NumberFormatException e1) {
-									print("A entrada deve ser um número!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
 									break;
 								} 
 								
 								estacionamento.get(index).setPorcHoraCheia(porcHoraCheia2edit);
 								break;
 							case 6:
-								float valorMensalista2edit = Float.parseFloat(input("Novo Valor Mensalidade: "));
+								float valorMensalista2edit = float_input("Novo Valor Mensalidade: ");
 								
 								try {
 									validarInputString(String.valueOf(valorMensalista2edit));
 									validarInputNum(valorMensalista2edit);
 								} catch (DescricaoEmBrancoException e) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 								} catch (ValorAcessoInvalidoException e2) {
-									print("Entrada Invalida!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 								} catch (NumberFormatException e1) {
-									print("A entrada deve ser um número!!!\n");
-									decor("-=-", 15);
-									ok();
+									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
 									break;
 								} 
 								
 								estacionamento.get(index).setValorMensalista(valorMensalista2edit);
 								break;
 							default:
-								print("Entrada Invalida!!!\n");
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								break;
 						}
 	
@@ -545,15 +463,11 @@ class Main {
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
 							break;
 						}
 						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							System.out.println(estacionamento.get(i).getNome());
-						}
+						printAllEstacionamentos(estacionamento);
 						
 						decor("-=-", 15);
 	
@@ -564,9 +478,7 @@ class Main {
 						try {
 							verificarListEstacionamentosPeloNome(estacionamento, nome2search);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("O Estacionamento digitado não existe!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
 							break;
 						}
 	
@@ -589,20 +501,16 @@ class Main {
 						if(tipoAcesso == 4){
 							break;
 						}
-						print("Estacionamentos Disponiveis:\n");
+						println("Estacionamentos Disponiveis:");
 						decor("-=-", 15);
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
 							break;
 						}
 						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							System.out.println(estacionamento.get(i).getNome());
-						}
+						printAllEstacionamentos(estacionamento);
 						
 						
 						decor("-=-", 15);
@@ -614,9 +522,7 @@ class Main {
 						try {
 							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("O Estacionamento digitado não existe!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
 							break;
 						}
 	
@@ -633,9 +539,7 @@ class Main {
 						try {
 							validarInputString(placa);
 						} catch (DescricaoEmBrancoException e) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						}
 						
@@ -644,9 +548,7 @@ class Main {
 						try {
 							validarInputString(dataHoraEntrada);
 						} catch (DescricaoEmBrancoException e) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						}
 						
@@ -655,9 +557,7 @@ class Main {
 						try {
 							validarInputString(horaHoraSaida);
 						} catch (DescricaoEmBrancoException e) {
-							print("Entrada Invalida!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						}
 						
@@ -676,7 +576,7 @@ class Main {
 								try {
 									estacionamento.get(index).listarAllEventos();
 								} catch (ObjetoNaoEncontradoException e) {
-									print("Nenhum Evento Cadastrado!!!\n");
+									println("Nenhum Evento Cadastrado!!!");
 									decor("-=-", 15);
 									ok();
 									break;
@@ -690,7 +590,7 @@ class Main {
 								try {
 									evento = estacionamento.get(index).retornarEvento(evento2search);
 								} catch (ObjetoNaoEncontradoException e) {
-									print("O Evento digitado não existe!!!\n");
+									println("O Evento digitado não existe!!!");
 									decor("-=-", 15);
 									ok();
 									break;
@@ -713,21 +613,17 @@ class Main {
 						cls();
 						title("Acessos", "-=-", 15);
 	
-						print("Estacionamentos Disponiveis:\n");
+						println("Estacionamentos Disponiveis:");
 						decor("-=-", 15);
 						
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
 							break;
 						}
 						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							System.out.println(estacionamento.get(i).getNome());
-						}
+						printAllEstacionamentos(estacionamento);
 						
 						decor("-=-", 15);
 	
@@ -738,9 +634,7 @@ class Main {
 						try {
 							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("O Estacionamento digitado não existe!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
 							break;
 						}
 						
@@ -757,7 +651,7 @@ class Main {
 						try {
 							estacionamento.get(index).listarAllAcessos();
 						} catch (ObjetoNaoEncontradoException e1) {
-							print("Nenhum Acesso Aadastrado!!!\n");
+							println("Nenhum Acesso Cadastrado!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -770,7 +664,7 @@ class Main {
 						try {
 							estacionamento.get(index).excluirAcessoPelaPlaca(placa2exclude);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("A placa digitada não existe!!!\n");
+							println("A placa digitada não existe!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -785,9 +679,7 @@ class Main {
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
 							break;
 						}
 						
@@ -795,7 +687,7 @@ class Main {
 							try {
 								estacionamento.get(i).listarAllAcessos();
 							} catch (ObjetoNaoEncontradoException e) {
-								print("Nenhum Acesso Cadastrado!!!\n");
+								println("Nenhum Acesso Cadastrado!!!");
 								decor("-=-", 15);
 								ok();
 								break;
@@ -807,21 +699,17 @@ class Main {
 					} else if (opcaoAcesso == 3) { 
 						cls();
 						title("Acessos", "-=-", 15);
-						print("Estacionamentos Disponiveis:\n");
+						println("Estacionamentos Disponiveis:");
 						decor("-=-", 15);
 	
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
 							break;
 						}
 						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							System.out.println(estacionamento.get(i).getNome());
-						}
+						printAllEstacionamentos(estacionamento);
 						
 						decor("-=-", 15);
 	
@@ -832,9 +720,7 @@ class Main {
 						try {
 							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("O Estacionamento digitado não existe!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
 							break;
 						}
 						
@@ -849,8 +735,7 @@ class Main {
 						try {
 							estacionamento.get(index).listarAllAcessos();
 						} catch (ObjetoNaoEncontradoException e1) {
-							print("Nenhum Acesso Aadastrado!!!\n");
-							decor("-=-", 15);
+							raiseError(true, "Nenhum Acesso Cadastrado!!!", "-=-", 15);
 							ok();
 							break;
 						}
@@ -868,13 +753,13 @@ class Main {
 						try {
 							acesso = estacionamento.get(index).retornarAcesso(placa2edit);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("A Placa digitado não existe!!!\n");
+							println("A Placa digitado não existe!!!");
 							decor("-=-", 15);
 							ok();
 							break;
 						}
 						
-						int opcaoEdicao = Integer.parseInt(input("Deseja editar o que?\n> "));
+						int opcaoEdicao = int_input("Deseja editar o que?\n> ");
 	
 						
 						if(opcaoEdicao == 0){
@@ -883,9 +768,7 @@ class Main {
 							try {
 								validarInputString(placa);
 							} catch (DescricaoEmBrancoException e) {
-								print("Entrada Invalida!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								break;
 							}
 							
@@ -896,9 +779,7 @@ class Main {
 							try {
 								validarInputString(dataHoraEntrada);
 							} catch (DescricaoEmBrancoException e) {
-								print("Entrada Invalida!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								break;
 							}
 							
@@ -909,16 +790,13 @@ class Main {
 							try {
 								validarInputString(horaHoraSaida);
 							} catch (DescricaoEmBrancoException e) {
-								print("Entrada Invalida!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								break;
 							}
 							
 							acesso.setDataHoraSaida(horaHoraSaida);
 						} else {
-							print("Entrada Invalida!!!\n");
-							ok();
+							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 							break;
 						}
 						
@@ -927,21 +805,17 @@ class Main {
 					} else if (opcaoAcesso == 4) { 
 						cls();
 						title("Acessos", "-=-", 15);
-						print("Estacionamentos Disponiveis:\n");
+						println("Estacionamentos Disponiveis:");
 						decor("-=-", 15);
 	
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
 							break;
 						}
 						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							System.out.println(estacionamento.get(i).getNome());
-						}
+						printAllEstacionamentos(estacionamento);
 						
 						decor("-=-", 15);
 	
@@ -952,9 +826,7 @@ class Main {
 						try {
 							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("O Estacionamento digitado não existe!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
 							break;
 						}
 	
@@ -969,7 +841,7 @@ class Main {
 						try {
 							estacionamento.get(index).listarAllAcessos();
 						} catch (ObjetoNaoEncontradoException e1) {
-							print("Nenhum Acesso Cadastrado!!!\n");
+							println("Nenhum Acesso Cadastrado!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -982,7 +854,7 @@ class Main {
 						try {
 							estacionamento.get(index).exibirAcessoPelaPlaca(placa2search);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("A Placa digitado não existe!!!\n");
+							println("A Placa digitado não existe!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -993,21 +865,17 @@ class Main {
 					} else if (opcaoAcesso == 5) {  
 						cls();
 						title("Acessos", "-=-", 15);
-						print("Estacionamentos Disponiveis:\n");
+						println("Estacionamentos Disponiveis:");
 						decor("-=-", 15);
 	
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
 							break;
 						}
 						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							System.out.println(estacionamento.get(i).getNome());
-						}
+						printAllEstacionamentos(estacionamento);
 						
 						decor("-=-", 15);
 	
@@ -1018,9 +886,7 @@ class Main {
 						try {
 							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("O Estacionamento digitado não existe!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
 							break;
 						}
 						
@@ -1033,10 +899,10 @@ class Main {
 						}
 						
 						try {
-							print("Eventos disponiveis: \n");
+							println("Eventos disponiveis: ");
 							estacionamento.get(index).listarAllEventos();
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Evento foi criado!!!\n");
+							println("Nenhum Evento foi criado!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -1053,17 +919,17 @@ class Main {
 						try {
 							evento = estacionamento.get(index).retornarEvento(eventoEscolha);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Evento digitado ainda nao foi cadastrado!!!\n");
+							println("Evento digitado ainda nao foi cadastrado!!!");
 							decor("-=-", 15);
 							ok();
 							break;
 						}
 						
 						try {
-							print("Acessos Evento disponiveis: \n");
+							println("Acessos Evento disponiveis: ");
 							evento.listarAllAcessosEventos();
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum acesso evento cadastrado!!!\n");
+							println("Nenhum acesso evento cadastrado!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -1079,7 +945,7 @@ class Main {
 						try {
 							acessoEvento = evento.retornarAcessoEventoPelaPlaca(placa2edit);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum acesso evento com essa placa foi cadastrada!!!\n");
+							println("Nenhum acesso evento com essa placa foi cadastrada!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -1088,7 +954,7 @@ class Main {
 						decor("-=-", 15);
 						printMenu("Acessos Edicao", "-=-", 15, itemsAcessoEdicao);
 						
-						int escolha = Integer.parseInt(input("O que deseja editar?\n> "));
+						int escolha = int_input("O que deseja editar?\n> ");
 						
 						if(escolha == 0) {
 							String placa = input("Nova Placa:\n> ");
@@ -1096,9 +962,7 @@ class Main {
 							try {
 								validarInputString(placa);
 							} catch (DescricaoEmBrancoException e) {
-								print("Entrada Invalida!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								break;
 							}
 							
@@ -1109,9 +973,7 @@ class Main {
 							try {
 								validarInputString(dataHoraEntrada);
 							} catch (DescricaoEmBrancoException e) {
-								print("Entrada Invalida!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								break;
 							}
 							
@@ -1122,9 +984,7 @@ class Main {
 							try {
 								validarInputString(dataHoraSaida);
 							} catch (DescricaoEmBrancoException e) {
-								print("Entrada Invalida!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								break;
 							}
 							acessoEvento.setDataHoraSaida(dataHoraSaida);
@@ -1135,21 +995,17 @@ class Main {
 					} else if (opcaoAcesso == 6) { 
 						cls();
 						title("Acessos", "-=-", 15);
-						print("Estacionamentos Disponiveis:\n");
+						println("Estacionamentos Disponiveis:");
 						decor("-=-", 15);
 	
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
 							break;
 						}
 						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							System.out.println(estacionamento.get(i).getNome());
-						}
+						printAllEstacionamentos(estacionamento);
 						
 						decor("-=-", 15);
 	
@@ -1160,9 +1016,7 @@ class Main {
 						try {
 							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("O Estacionamento digitado não existe!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
 							break;
 						}
 						
@@ -1175,10 +1029,10 @@ class Main {
 						}
 						
 						try {
-							print("Eventos disponiveis: \n");
+							println("Eventos disponiveis: ");
 							estacionamento.get(index).listarAllEventos();
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Evento foi criado!!!\n");
+							println("Nenhum Evento foi criado!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -1195,17 +1049,17 @@ class Main {
 						try {
 							evento = estacionamento.get(index).retornarEvento(eventoEscolha);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Evento digitado ainda nao foi cadastrado!!!\n");
+							println("Evento digitado ainda nao foi cadastrado!!!");
 							decor("-=-", 15);
 							ok();
 							break;
 						}
 						
 						try {
-							print("Acessos Evento disponiveis: \n");
+							println("Acessos Evento disponiveis: ");
 							evento.listarAllAcessosEventos();
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum acesso evento cadastrado!!!\n");
+							println("Nenhum acesso evento cadastrado!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -1221,7 +1075,7 @@ class Main {
 						try {
 							acessoEvento = evento.retornarAcessoEventoPelaPlaca(placa2edit);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum acesso evento com essa placa foi cadastrada!!!\n");
+							println("Nenhum acesso evento com essa placa foi cadastrada!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -1237,21 +1091,17 @@ class Main {
 					} else if (opcaoAcesso == 7) { 
 						cls();
 						title("Acessos", "-=-", 15);
-						print("Estacionamentos Disponiveis:\n");
+						println("Estacionamentos Disponiveis:");
 						decor("-=-", 15);
 	
 						try {
 							verificarListEstacionamentos(estacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Estacionamento foi criado!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
 							break;
 						}
 						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							System.out.println(estacionamento.get(i).getNome());
-						}
+						printAllEstacionamentos(estacionamento);
 						
 						decor("-=-", 15);
 	
@@ -1262,9 +1112,7 @@ class Main {
 						try {
 							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("O Estacionamento digitado não existe!!!\n");
-							decor("-=-", 15);
-							ok();
+							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
 							break;
 						}
 						
@@ -1277,10 +1125,10 @@ class Main {
 						}
 						
 						try {
-							print("Eventos disponiveis: \n");
+							println("Eventos disponiveis: ");
 							estacionamento.get(index).listarAllEventos();
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum Evento foi criado!!!\n");
+							println("Nenhum Evento foi criado!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -1297,17 +1145,17 @@ class Main {
 						try {
 							evento = estacionamento.get(index).retornarEvento(eventoEscolha);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Evento digitado ainda nao foi cadastrado!!!\n");
+							println("Evento digitado ainda nao foi cadastrado!!!");
 							decor("-=-", 15);
 							ok();
 							break;
 						}
 						
 						try {
-							print("Acessos Evento disponiveis: \n");
+							println("Acessos Evento disponiveis: ");
 							evento.listarAllAcessosEventos();
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Nenhum acesso evento cadastrado!!!\n");
+							println("Nenhum acesso evento cadastrado!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -1322,7 +1170,7 @@ class Main {
 						try {
 							evento.excluirAcessoEventoPelaPlaca(placa2exclude);
 						} catch (ObjetoNaoEncontradoException e) {
-							print("Essa placa ainda nao foi cadastrada!!!\n");
+							println("Essa placa ainda nao foi cadastrada!!!");
 							decor("-=-", 15);
 							ok();
 							break;
@@ -1340,21 +1188,17 @@ class Main {
 						case 0: 
 							cls();
 							title("Eventos", "-=-", 15);
-							print("Estacionamentos Disponiveis:\n");
+							println("Estacionamentos Disponiveis:");
 							decor("-=-", 15);
 							
 							try {
 								verificarListEstacionamentos(estacionamento);
 							} catch (ObjetoNaoEncontradoException e) {
-								print("Nenhum Estacionamento foi criado!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Nenhum Estacionamento foi criado!!!", "-=-", 15);
 								break;
 							}
 							
-							for (int i = 0; i < estacionamento.size(); i++) {
-								System.out.println(estacionamento.get(i).getNome());
-							}
+							printAllEstacionamentos(estacionamento);
 				
 							
 							decor("-=-", 15);
@@ -1366,7 +1210,7 @@ class Main {
 							try {
 								verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
 							} catch (ObjetoNaoEncontradoException e1) {
-								print("O Estacionamento digitado não existe!!!\n");
+								println("O Estacionamento digitado não existe!!!");
 								decor("-=-", 15);
 								ok();
 								break;
@@ -1385,9 +1229,7 @@ class Main {
 							try {
 								validarInputString(nomeEvento);
 							} catch (DescricaoEmBrancoException e3) {
-								print("Entrada Invalida!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								break;
 							}
 							
@@ -1396,9 +1238,7 @@ class Main {
 							try {
 								validarInputString(dataHoraEventoInicio);
 							} catch (DescricaoEmBrancoException e3) {
-								print("Entrada Invalida!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								break;
 							}
 							
@@ -1407,31 +1247,25 @@ class Main {
 							try {
 								validarInputString(dataHoraEventoFim);
 							} catch (DescricaoEmBrancoException e3) {
-								print("Entrada Invalida!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								break;
 							}
 							
-							float valorEvento = Float.parseFloat(input("Valor do Evento:\n> "));
+							float valorEvento = float_input("Valor do Evento:\n> ");
 							
 							try {
 								validarInputString(String.valueOf(valorEvento));
 								validarInputNum(valorEvento);
 							} catch (DescricaoEmBrancoException e) {
-								print("Entrada Invalida!!!\n");
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								decor("-=-", 15);
 								ok();
 								break;
 							} catch (ValorAcessoInvalidoException e2) {
-								print("Entrada Invalida!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 								break;
 							} catch (NumberFormatException e1) {
-								print("A entrada deve ser um número!!!\n");
-								decor("-=-", 15);
-								ok();
+								println("A entrada deve ser um número!!!");
 								break;
 							} 
 							
@@ -1444,22 +1278,17 @@ class Main {
 						case 1: 
 							cls();
 							title("Eventos", "-=-", 15);
-							
-							print("Estacionamentos Disponiveis:\n");
+							println("Estacionamentos Disponiveis:");
 							decor("-=-", 15);
 							
 							try {
 								verificarListEstacionamentos(estacionamento);
 							} catch (ObjetoNaoEncontradoException e) {
-								print("Nenhum Estacionamento foi criado!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Nenhum Estacionamento foi criado!!!", "-=-", 15);
 								break;
 							}
 							
-							for (int i = 0; i < estacionamento.size(); i++) {
-								System.out.println(estacionamento.get(i).getNome());
-							}
+							printAllEstacionamentos(estacionamento);
 							
 							decor("-=-", 15);
 							
@@ -1470,7 +1299,7 @@ class Main {
 							try {
 								verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
 							} catch (ObjetoNaoEncontradoException e1) {
-								print("O Estacionamento digitado não existe!!!\n");
+								println("O Estacionamento digitado não existe!!!");
 								decor("-=-", 15);
 								ok();
 								break;
@@ -1487,7 +1316,7 @@ class Main {
 							try {
 								estacionamento.get(index).listarAllEventos();
 							} catch (ObjetoNaoEncontradoException e1) {
-								print("Nenhum Evento Cadastrado!!!\n");
+								println("Nenhum Evento Cadastrado!!!");
 								decor("-=-", 15);
 								ok();
 								break;
@@ -1500,7 +1329,7 @@ class Main {
 							try {
 								estacionamento.get(index).apagarEventoPeloNome(nome2delete);
 							} catch (ObjetoNaoEncontradoException e2) {
-								print("O Evento digitado não existe!!!\n");
+								println("O Evento digitado não existe!!!");
 								decor("-=-", 15);
 								ok();
 								break;
@@ -1517,7 +1346,7 @@ class Main {
 								try {
 									estacionamento.get(i).listarAllEventos();
 								} catch (ObjetoNaoEncontradoException e1) {
-									print("Nenhum Evento Cadastrado!!!\n");
+									println("Nenhum Evento Cadastrado!!!");
 									decor("-=-", 15);
 									ok();
 									break;
@@ -1535,15 +1364,11 @@ class Main {
 							try {
 								verificarListEstacionamentos(estacionamento);
 							} catch (ObjetoNaoEncontradoException e) {
-								print("Nenhum Estacionamento foi criado!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Nenhum Estacionamento foi criado!!!", "-=-", 15);
 								break;
 							}
 		
-							for (int i = 0; i < estacionamento.size(); i++) {
-								System.out.println(estacionamento.get(i).getNome());
-							}
+							printAllEstacionamentos(estacionamento);
 		
 							decor("-=-", 15);
 							String objeto2edit = input("Insira o nome do estacionamento\n> ");
@@ -1551,7 +1376,7 @@ class Main {
 							try {
 								verificarListEstacionamentosPeloNome(estacionamento, objeto2edit);
 							} catch (ObjetoNaoEncontradoException e1) {
-								print("O Estacionamento digitado não existe!!!\n");
+								println("O Estacionamento digitado não existe!!!");
 								decor("-=-", 15);
 								ok();
 								break;
@@ -1564,7 +1389,7 @@ class Main {
 									try {
 										estacionamento.get(i).listarAllEventos();
 									} catch (ObjetoNaoEncontradoException e) {
-										print("Nenhum Evento Cadastrado!!!\n");
+										println("Nenhum Evento Cadastrado!!!");
 										decor("-=-", 15);
 										ok();
 										break;
@@ -1581,7 +1406,7 @@ class Main {
 							try {
 								evento = estacionamento.get(index).retornarEvento(evento2edit);
 							} catch (ObjetoNaoEncontradoException e1) {
-								print("O Evento digitado não existe!!!\n");
+								println("O Evento digitado não existe!!!");
 								decor("-=-", 15);
 								ok();
 								break;
@@ -1590,7 +1415,7 @@ class Main {
 							
 	
 							printMenu("Evento Edicao", "-=-", 15, itemsEventoEdicao);
-							int opcaoEdicao = Integer.parseInt(input("O que deseja editar\n> "));
+							int opcaoEdicao = int_input("O que deseja editar\n> ");
 							switch (opcaoEdicao) {
 								case 0:
 									String nome2edit = input("Novo Nome Evento\n> ");
@@ -1598,9 +1423,7 @@ class Main {
 									try {
 										validarInputString(nome2edit);
 									} catch (DescricaoEmBrancoException e2) {
-										print("Entrada Invalida!!!\n");
-										decor("-=-", 15);
-										ok();
+										raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 										break;
 									}
 									
@@ -1612,9 +1435,7 @@ class Main {
 									try {
 										validarInputString(dataHoraInicio);
 									} catch (DescricaoEmBrancoException e2) {
-										print("Entrada Invalida!!!\n");
-										decor("-=-", 15);
-										ok();
+										raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 										break;
 									}
 									
@@ -1626,7 +1447,7 @@ class Main {
 									try {
 										validarInputString(dataHoraFim);
 									} catch (DescricaoEmBrancoException e2) {
-										print("Entrada Invalida!!!\n");
+										raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 										decor("-=-", 15);
 										ok();
 										break;
@@ -1635,21 +1456,19 @@ class Main {
 									evento.setDataHoraEventoFim(dataHoraFim);
 									break;
 								case 3:
-									float novoValorEvento = Float.parseFloat(input("Novo Valor do Evento\n>"));
+									float novoValorEvento = float_input("Novo Valor do Evento\n>");
 									
 									try {
 										validarInputString(String.valueOf(novoValorEvento));
 									} catch (DescricaoEmBrancoException e2) {
-										print("Entrada Invalida!!!\n");
-										decor("-=-", 15);
-										ok();
+										raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 										break;
 									}
 									
 									evento.setValorEvento(novoValorEvento);
 									break;
 								default:
-									print("Entrada Invalida!!!\n");
+									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
 									break;
 							}
 		
@@ -1664,15 +1483,11 @@ class Main {
 							try {
 								verificarListEstacionamentos(estacionamento);
 							} catch (ObjetoNaoEncontradoException e) {
-								print("Nenhum Estacionamento foi criado!!!\n");
-								decor("-=-", 15);
-								ok();
+								raiseError(true, "Nenhum Estacionamento foi criado!!!", "-=-", 15);
 								break;
 							}
 							
-							for (int i = 0; i < estacionamento.size(); i++) {
-								System.out.println(estacionamento.get(i).getNome());
-							}
+							printAllEstacionamentos(estacionamento);
 		
 							decor("-=-", 15);
 							
@@ -1683,7 +1498,7 @@ class Main {
 							try {
 								verificarListEstacionamentosPeloNome(estacionamento, estacionamento2search);
 							} catch (ObjetoNaoEncontradoException e1) {
-								print("O Estacionamento digitado não existe!!!\n");
+								println("O Estacionamento digitado não existe!!!");
 								decor("-=-", 15);
 								ok();
 								break;
@@ -1696,7 +1511,7 @@ class Main {
 									try {
 										estacionamento.get(i).listarAllEventos();
 									} catch (ObjetoNaoEncontradoException e) {
-										print("Nenhum Evento Cadastrado!!!\n");
+										println("Nenhum Evento Cadastrado!!!");
 										decor("-=-", 15);
 										ok();
 										break;
@@ -1712,7 +1527,7 @@ class Main {
 							try {
 								evento = estacionamento.get(index).retornarEvento(evento2search);
 							} catch (ObjetoNaoEncontradoException e) {
-								print("O Evento digitado não existe!!!\n");
+								println("O Evento digitado não existe!!!");
 								decor("-=-", 15);
 								ok();
 								break;
@@ -1725,15 +1540,11 @@ class Main {
 							break;
 	
 						default:
-							print("Entrada Invalida!!!\n");
 							break;
 					}
 				} else if (opcao == 3) { // Sair
-					print("Saindo do sistema!!!\n");
+					println("Saindo do sistema!!!");
 					System.exit(0);
-					break;
-				} else {
-					print("Entrada Invalida!!!\n");
 					break;
 				}
 			}
@@ -1745,7 +1556,9 @@ class Main {
 	public static void print(String msg) {
 		System.out.print(msg);
 	}
-
+	public static void println(String msg) {
+		System.out.println(msg);
+	}
 	// Limpeza de tela
 	public static void cls() {
 		System.out.print("\033[H\033[2J");
@@ -1768,12 +1581,28 @@ class Main {
 		return result; // Retorna o resultado do input
 	} // Ex: String nome = sy.input("Insira seu nome\n> ");
 
+	public static Float float_input(String msg) {
+		@SuppressWarnings("resource")
+		Scanner sc = new Scanner(System.in);
+		print(msg);
+		Float result = sc.nextFloat();
+		return result;
+	}
+
+	public static int int_input(String msg) {
+		@SuppressWarnings("resource")
+		Scanner sc = new Scanner(System.in);
+		print(msg);
+		int result = sc.nextInt();
+		return result;
+	}
+
 	// Linha de decoração
 	public static void decor(String chr, int decor_size) {
 		for (int i = 0; i < decor_size; i++) { // Imprime uma quantidade de strings igual ao valor decor_size
 			print(chr);
 		}
-		print("\n"); // Quebra a linha
+		println(""); // Quebra a linha
 	} // Ex: sy.decor("-=-",9) >>> "-=--=--=-" (Total de 9 digitos)
 
 	// Centralizador de texto
@@ -1789,8 +1618,7 @@ class Main {
 		for (int i = 0; i < center / 2; i++) { 
 			print(" ");
 		}
-		print(msg); // Imprime a mensagem
-		print("\n"); // Quebra a linha
+		println(msg); // Quebra a linha
 	} // Ex: sy.title("Teste","-=-",9)
 
 	// Criador de títulos
@@ -1815,9 +1643,9 @@ class Main {
 		do {
 			cls(); // Limpa tela
 			printMenu(msg, chr, decor_size, items); // Printa um menu
-			result = Integer.parseInt(input("> ")); // Solicita o input de um usuário
+			result = int_input("> "); // Solicita o input de um usuário
 			// Cria algo parecido com uma Exception
-			optionError(
+			raiseError(
 				(result > items.length || result < 0),
 				"OPÇÃO INVÁLIDA",
 				chr,
@@ -1829,10 +1657,16 @@ class Main {
 										// switch case ou qualquer outra coisa.
 	}
 
-	public static void optionError(Boolean condition, String msg, String decor, int decor_size) {
+	public static void raiseError(Boolean condition, String msg, String decor, int decor_size) {
 		if (condition) {
 			title(msg, decor, decor_size);
 			ok();
+		}
+	}
+	
+	public static void printAllEstacionamentos(List<Estacionamento> list){
+		for (int i = 0; i < list.size(); i++) {
+			println(list.get(i).getNome());
 		}
 	}
 }
