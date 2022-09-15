@@ -11,3 +11,4 @@ Entrega dos digramas de classe e objeto utilizando a ferramenta drawio.
 ## Parte 2
 Entrega da primeira parte do código (PASTA CODES)
 ## Parte 3
+Entrega de relatório sobre MVC
