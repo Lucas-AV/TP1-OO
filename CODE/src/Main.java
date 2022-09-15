@@ -596,6 +596,7 @@ class Main {
 								continue;
 							}
 							String eventoEscolha = estacionamento.get(index).getEventos().get(ev_index).getNomeEvento();
+							
 							List<Evento> evnts = estacionamento.get(index).getEventos();
 							Evento evento = evnts.get(eventoIndex(evnts,eventoEscolha));
 							if(evento == null){
@@ -1150,7 +1151,7 @@ class Main {
 		println("Começo: " + acessoEventos.getDataHoraEntrada());
 		println("Fim: " + acessoEventos.getDataHoraSaida());
 		println("Estacionado: " + acessoEventos.getMinutosEstacionados());
-		println("Evento");
+		println("\nEvento");
 		view_evento(acessoEventos.getEvento());
 	}
 
