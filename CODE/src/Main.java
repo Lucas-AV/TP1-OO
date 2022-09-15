@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.HashMap;
 
 import Acessos.Acesso;
 import Acessos.AcessoEvento;
@@ -14,7 +16,6 @@ import Exceptions.ObjetoNaoEncontradoException;
 import Exceptions.ValorAcessoInvalidoException;
 
 class Main {
-
 	public static void verificarListEstacionamentos(List<Estacionamento> estacionamento) throws ObjetoNaoEncontradoException{
 		if(estacionamento.size() == 0){
 			throw new ObjetoNaoEncontradoException();
@@ -25,7 +26,9 @@ class Main {
 		for (int i = 0; i < estacionamento.size(); i++) {
 			if (estacionamento.get(i).getNome().equals(nome)) {
 				break;
-			} else if(i == estacionamento.size() - 1) {
+			} 
+			
+			else if(i == estacionamento.size() - 1) {
 				throw new ObjetoNaoEncontradoException();
 			}
 		}
@@ -44,6 +47,9 @@ class Main {
 	 }
 
 	public static void main(String[] args) {
+		String global_decor = "-=-";
+		int global_decor_size = 15;
+
 		int opcao;
 		List<Estacionamento> estacionamento = new ArrayList<Estacionamento>();
 		String[] itemsPrincipal = {
@@ -60,7 +66,6 @@ class Main {
 			"Pesquisar estacionamento",
 			"Voltar"
 		};
-
 		String[] itemsEdicao = {
 			"Nome",
 			"Capacidade",
@@ -70,8 +75,7 @@ class Main {
 			"Porcentagem Hora Cheia",
 			"Valor Mensalidade",
 			"Voltar"
-		};
-		
+		};	
 		String[] itemsCadastroAcesso = {
 			"Cadastrar acesso Diario",
 			"Cadastrar acesso Por Tempo",
@@ -79,7 +83,6 @@ class Main {
 			"Cadastrar acesso Mensalista",
 			"voltar"
 		};
-
 		String[] itemsAcesso = {
 			"Cadastrar acesso",
 			"Excluir acesso",
@@ -91,20 +94,18 @@ class Main {
 			"Excluir acesso Evento",
 			"Voltar"
 		};
-
 		String[] itemsAcessoEdicao = {
 			"Placa",
 			"Data Hora Entrada",
 			"Data Hora Saida"
 		};
-
 		String[] itemsEventoEdicao = {
 			"Nome Evento",
 			"Data e Hora Evento Inicio",
 			"Data e Hora Evento Fim",
-			"Valor do Evento"
+			"Valor do Evento",
+			"Voltar",
 		};
-
 		String[] itemsEvento = {
 			"Cadastrar evento",
 			"Excluir evento",
@@ -113,1436 +114,729 @@ class Main {
 			"Pesquisar evento",
 			"Voltar"
 		};
+		
 		while (true){
 			while (true) {
-				opcao = inputMenu("Menu Principal", "-=-", 15, itemsPrincipal);
+				opcao = inputMenu("Menu Principal", global_decor, global_decor_size, itemsPrincipal);
 				// Estacionamento
 				if (opcao == 0) { 
-					int opcaoEstacionamento = inputMenu("Estacionamentos", "-=-", 15, itemsEstacionamento);
-					
-					if (opcaoEstacionamento == 0) { 
-						float porcDiariaNoturna, valorDiariaDiurna, valorFracaoQuinze, porcHoraCheia, valorMensalista;
-						int capacidade;
-						String nome;
-
-						cls();
-						title("Estacionamento", "-=-", 15);
-						nome = input("Insira o nome do estacionamento\n> ");
-						try {
-							validarInputString(nome);
-						} catch (DescricaoEmBrancoException e) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						}
+					int opcaoEstacionamento = -1;
+					while(opcaoEstacionamento != 5){
+						opcaoEstacionamento = inputMenu("Estacionamentos", global_decor, global_decor_size, itemsEstacionamento);
 						
-						capacidade = int_input("Insira a capacidade do estacionamento\n> ");
-						try {
-							validarInputString(String.valueOf(capacidade));
-							validarInputNum(capacidade);
-						} catch (DescricaoEmBrancoException e) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (ValorAcessoInvalidoException e2) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (NumberFormatException e1) {
-							println("A entrada deve ser um número!!!");
-							break;
+						// "Cadastrar estacionamento",
+						if (opcaoEstacionamento == 0) { 
+							float porcDiariaNoturna, valorDiariaDiurna, valorFracaoQuinze, porcHoraCheia, valorMensalista;
+							Map<String,String> estacItems = new HashMap<>();
+							boolean unique = false;
+							String nome = "";
+							int capacidade;
+	
+							while(nome.equalsIgnoreCase(" ") || nome.isEmpty() || !unique){
+								cls();
+								title("Estacionamento", global_decor, global_decor_size);
+								nome = input("Insira o nome do estacionamento\n> ");
+								if(raiseError((nome.equalsIgnoreCase(" ") || nome.isEmpty()), "A STRING NÃO PODE ESTAR VAZIA", global_decor, global_decor_size)){
+									continue;
+								}
+								unique = unique_string(nome, get_nomes(estacionamento));
+								raiseError(!unique,"JÁ EXISTE UM ESTACIONAMENTO COM ESSE NOME", global_decor, global_decor_size);
+							}
+							estacItems.put("Nome", nome);
+							
+							capacidade = input_int_view_cad("Insira a capacidade do estacionamento\n> ","Cadastrando estacionamento", global_decor, global_decor_size, estacItems);
+							estacItems.put("Capacidade", int_str(capacidade));
+	
+							valorDiariaDiurna = input_float_view_cad("Insira o valor da diaria\n> ","Cadastrando estacionamento", global_decor, global_decor_size, estacItems);
+							estacItems.put("Diaria diurna", float_str(valorDiariaDiurna));
+	
+							porcDiariaNoturna = input_float_view_cad("Insira a porcentagem da diária noturna\n> ","Cadastrando estacionamento", global_decor, global_decor_size, estacItems);
+							estacItems.put("Diaria noturna", float_str(porcDiariaNoturna));
+	
+							valorFracaoQuinze = input_float_view_cad("Insira o valor da Fração de Quinze minutos:\n> ","Cadastrando estacionamento", global_decor, global_decor_size, estacItems);
+							estacItems.put("Fração quinze", float_str(valorFracaoQuinze));
+	
+							porcHoraCheia = input_float_view_cad("Insira o valor do desconto da hora cheia\n> ","Cadastrando estacionamento", global_decor, global_decor_size, estacItems);
+							estacItems.put("Hora cheia", float_str(porcHoraCheia));
+	
+							valorMensalista = input_float_view_cad("Insira o valor Mensalista\n> ","Cadastrando estacionamento", global_decor, global_decor_size, estacItems);
+							estacItems.put("Valor mensalista", float_str(valorMensalista));
+							
+							view_cad("Cadastrando estacionamento", global_decor, global_decor_size, estacItems);
+							Estacionamento novoEstacionamento = new Estacionamento(
+								nome, 
+								capacidade, 
+								valorDiariaDiurna, 
+								porcDiariaNoturna,
+								valorFracaoQuinze, 
+								porcHoraCheia, 
+								valorMensalista
+							);
+							estacionamento.add(novoEstacionamento);
+							ok();
 						} 
 						
-						valorDiariaDiurna = float_input("Insira o valor da diaria\n> ");
-						try {
-							validarInputString(String.valueOf(valorDiariaDiurna));
-							validarInputNum(valorDiariaDiurna);
-						} catch (DescricaoEmBrancoException e) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (ValorAcessoInvalidoException e2) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (NumberFormatException e1) {
-							raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
-							break;
+						// "Excluir estacionamento",
+						else if (opcaoEstacionamento == 1) { 
+							int index = index_of_estacionamento("Excluir Estacionamento",estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
+							}
+							title("ESTACIONAMENTO " + estacionamento.get(index).getNome() + " EXCLUIDO", global_decor, global_decor_size);
+							estacionamento.remove(index);
+							ok();
 						} 
 						
-						porcDiariaNoturna = float_input("Insira a porcentagem da diária noturna\n> ");
-						try {
-							validarInputString(String.valueOf(porcDiariaNoturna));
-							validarInputNum(porcDiariaNoturna);
-						} catch (DescricaoEmBrancoException e) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (ValorAcessoInvalidoException e2) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (NumberFormatException e1) {
-							println("A entrada deve ser um número!!!");
-							break;
+						// "Listar estacionamentos",
+						else if (opcaoEstacionamento == 2) { 
+							if(!title_for_estacionamentos("Estacionamentos Disponiveis", estacionamento, global_decor, global_decor_size)){
+								continue;
+							}
+							ok();
 						} 
 						
-						valorFracaoQuinze = float_input("Insira o valor da Fração de Quinze minutos:\n> ");
-						try {
-							validarInputString(String.valueOf(valorFracaoQuinze));
-							validarInputNum(valorFracaoQuinze);
-						} catch (DescricaoEmBrancoException e) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (ValorAcessoInvalidoException e2) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (NumberFormatException e1) {
-							println("A entrada deve ser um número!!!");
-							break;
-						} 
-						
-						porcHoraCheia = float_input("Insira o valor do desconto da hora cheia\n> ");
-						try {
-							validarInputString(String.valueOf(porcHoraCheia));
-							validarInputNum(valorFracaoQuinze);
-						} catch (DescricaoEmBrancoException e) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (ValorAcessoInvalidoException e2) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (NumberFormatException e1) {
-							println("A entrada deve ser um número!!!");
-							break;
-						} 
-						
-						valorMensalista = float_input("Insira o valor Mensalista\n> ");
-						try {
-							validarInputString(String.valueOf(valorMensalista));
-							validarInputNum(valorFracaoQuinze);
-						} catch (DescricaoEmBrancoException e) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (ValorAcessoInvalidoException e2) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						} catch (NumberFormatException e1) {
-							raiseError(true,"A entrada deve ser um número!!!","-=-", 15);
-							break;
-						} 
-						
-						Estacionamento novoEstacionamento = new Estacionamento(
-							nome, 
-							capacidade, 
-							valorDiariaDiurna, 
-							porcDiariaNoturna,
-							valorFracaoQuinze, 
-							porcHoraCheia, 
-							valorMensalista
-						);
-						estacionamento.add(novoEstacionamento);
-	
-						decor("-=-", 15);
-						ok();
-					} else if (opcaoEstacionamento == 1) { 
-						cls();
-						title("Estacionamento", "-=-", 15);
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
-							break;
-						}
-						
-						printAllEstacionamentos(estacionamento);
-							
-						decor("-=-", 15);
-						
-						String nome2exclude = input("Insira o nome do estacionamento\n> ");
-	
-						try {
-							verificarListEstacionamentosPeloNome(estacionamento, nome2exclude);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
-							break;
-						}
-						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							if (estacionamento.get(i).getNome().equals(nome2exclude)) {
-								estacionamento.remove(i);
-								break;
+						// "Editar estacionamento",
+						else if (opcaoEstacionamento == 3) {
+							int index = index_of_estacionamento("Editando Estacionamento", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
 							}
-						}
-	
-						decor("-=-", 15);
-						ok();
-					} else if (opcaoEstacionamento == 2) { 
-						cls();
-						title("Listando Estacionamento", "-=-", 15);
-	
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
-
-							break;
-						}
-						
-						printAllEstacionamentos(estacionamento);
-						
-						decor("-=-", 15);
-						ok();
-					} else if (opcaoEstacionamento == 3) { 
-						cls();
-						title("Editando Estacionamento", "-=-", 15);
-	
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
-							break;
-						}
-						
-						printAllEstacionamentos(estacionamento);
-						
-						decor("-=-", 15);
-						String objeto2edit = input("Insira o nome do estacionamento\n> ");
-						
-						try {
-							verificarListEstacionamentosPeloNome(estacionamento, objeto2edit);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
-							break;
-						}
-	
-						int index = 0;
-						for (int i = 0; i < estacionamento.size(); i++) {
-							if (estacionamento.get(i).getNome().equals(objeto2edit)) {
-								index = i;
-								estacionamento.get(i).listarAllAtributtes();
-								break;
-							}
-						}
-	
-						cls();
-						
-	
-						printMenu("Estacionamentos Edicao", "-=-", 15, itemsEdicao);
-						int opcaoEdicao = int_input("O que deseja editar\n> ");
-						switch (opcaoEdicao) {
-							case 0:
-								try {
-									String nome2edit = input("Novo nome\n> ");
-									validarInputString(nome2edit);
-									estacionamento.get(index).setNome(nome2edit);
-								} catch (DescricaoEmBrancoException e) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								}
-								
-								break;
-							case 1:
-							
-								try {
-									int capacidade2edit = int_input("Nova capacidade\n> ");
-									validarInputString(String.valueOf(capacidade2edit));
-									validarInputNum(capacidade2edit);
-									estacionamento.get(index).setCapacidade(capacidade2edit);
-								} catch (DescricaoEmBrancoException e) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-									break;
-								} catch (ValorAcessoInvalidoException e2) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-									break;
-								} catch (NumberFormatException e1) {
-									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
-									break;
-								} 
-								
-								break;
-							case 2:
-								float valorDiariaDiurna2edit = float_input("Novo Valor da Diaria Diurna: ");
-								
-								try {
-									validarInputString(String.valueOf(valorDiariaDiurna2edit));
-									validarInputNum(valorDiariaDiurna2edit);
-								} catch (DescricaoEmBrancoException e) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-									break;
-								} catch (ValorAcessoInvalidoException e2) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-									break;
-								} catch (NumberFormatException e1) {
-									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
-									break;
-								} 
-								
-								estacionamento.get(index).setValorDiariaDiurna(valorDiariaDiurna2edit);
-								break;
-							case 3:
-								float porcDiariaNoturna2edit = float_input("Nova Porcentagem Diaria Noturna: ");
-								
-								try {
-									validarInputString(String.valueOf(porcDiariaNoturna2edit));
-									validarInputNum(porcDiariaNoturna2edit);
-								} catch (DescricaoEmBrancoException e) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-									break;
-								} catch (ValorAcessoInvalidoException e2) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-
-									break;
-								} catch (NumberFormatException e1) {
-									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
-									break;
-								} 
-								
-								estacionamento.get(index).setPorcDiariaNoturna(porcDiariaNoturna2edit);
-								break;
-							case 4:
-								float valorFracaoQuinze2edit = float_input("Novo Valor da Fracao Quinze: ");
-								
-								try {
-									validarInputString(String.valueOf(valorFracaoQuinze2edit));
-									validarInputNum(valorFracaoQuinze2edit);
-								}catch (DescricaoEmBrancoException e) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-									break;
-								} catch (ValorAcessoInvalidoException e2) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-									break;
-								} catch (NumberFormatException e1) {
-									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
-									break;
-								} 
-								
-								estacionamento.get(index).setValorFracaoQuinze(valorFracaoQuinze2edit);
-								break;
-							case 5:
-								float porcHoraCheia2edit = float_input("Nova Porcentagem Hora Cheia: ");
-								
-								try {
-									validarInputString(String.valueOf(porcHoraCheia2edit));
-									validarInputNum(porcHoraCheia2edit);
-								} catch (DescricaoEmBrancoException e) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-									break;
-								} catch (ValorAcessoInvalidoException e2) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-									break;
-								} catch (NumberFormatException e1) {
-									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
-									break;
-								} 
-								
-								estacionamento.get(index).setPorcHoraCheia(porcHoraCheia2edit);
-								break;
-							case 6:
-								float valorMensalista2edit = float_input("Novo Valor Mensalidade: ");
-								
-								try {
-									validarInputString(String.valueOf(valorMensalista2edit));
-									validarInputNum(valorMensalista2edit);
-								} catch (DescricaoEmBrancoException e) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-									break;
-								} catch (ValorAcessoInvalidoException e2) {
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-									break;
-								} catch (NumberFormatException e1) {
-									raiseError(true, "A entrada deve ser um número!!!", "-=-", 15);
-									break;
-								} 
-								
-								estacionamento.get(index).setValorMensalista(valorMensalista2edit);
-								break;
-							default:
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								break;
-						}
-	
-						decor("-=-", 15);
-						ok();
-					} else if (opcaoEstacionamento == 4) { 
-						cls();
-						title("Estacionamento", "-=-", 15);
-						
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
-							break;
-						}
-						
-						printAllEstacionamentos(estacionamento);
-						
-						decor("-=-", 15);
-	
-						String nome2search = input("Insira o nome do estacionamento\n> ");
-	
-						decor("-=-", 15);
-						
-						try {
-							verificarListEstacionamentosPeloNome(estacionamento, nome2search);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
-							break;
-						}
-	
-						for (int i = 0; i < estacionamento.size(); i++) {
-							if (estacionamento.get(i).getNome().equals(nome2search)) {
-								estacionamento.get(i).listarAllAtributtes();
-								break;
-							}
-						}
-	
-						decor("-=-", 15);
-						ok();
-					} else if(opcaoEstacionamento == 5) { 
-						break;
-					}
-				} else if (opcao == 1) { // Acesso
-					int opcaoAcesso = inputMenu("Acessos", "-=-", 15, itemsAcesso);
-					if (opcaoAcesso == 0) {  // Cadastro
-						int tipoAcesso = inputMenu("Cadastro de acesso", "-=-", 15, itemsCadastroAcesso);
-						if(tipoAcesso == 4){
-							break;
-						}
-						println("Estacionamentos Disponiveis:");
-						decor("-=-", 15);
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
-							break;
-						}
-						
-						printAllEstacionamentos(estacionamento);
-						
-						
-						decor("-=-", 15);
-						
-						String nomeEstacionamento = input("Deseja alocar em qual estacionamento?\n> ");
-						
-						decor("-=-", 15);
-						
-						try {
-							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
-							break;
-						}
-	
-						int index = 0;
-						for (int i = 0; i < estacionamento.size(); i++) {
-							if (estacionamento.get(i).getNome().equals(nomeEstacionamento)) {
-								index = i;
-								break;
-							}
-						}
-	
-						String placa = input("Insira a placa\n> ");
-						
-						try {
-							validarInputString(placa);
-						} catch (DescricaoEmBrancoException e) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						}
-						
-						String dataHoraEntrada = input("Nova Data Hora Entrada (dd/MM/yyyy HH:mm):\n> ");
-						
-						try {
-							validarInputString(dataHoraEntrada);
-						} catch (DescricaoEmBrancoException e) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						}
-						
-						String horaHoraSaida = input("Nova Data Hora Saida (dd/MM/yyyy HH:mm):\n> ");
-						
-						try {
-							validarInputString(horaHoraSaida);
-						} catch (DescricaoEmBrancoException e) {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						}
-						
-						decor("-=-", 15);
-	
-						switch (tipoAcesso) {
-							case 0:
-								Diaria novoAcessoDiario = new Diaria(placa, dataHoraEntrada, horaHoraSaida, estacionamento.get(index));
-								estacionamento.get(index).adicionarAcesso(novoAcessoDiario);
-								break;
-							case 1:
-								PorTempo novoAcessoPorTempo = new PorTempo(placa, dataHoraEntrada, horaHoraSaida, estacionamento.get(index));
-								estacionamento.get(index).adicionarAcesso(novoAcessoPorTempo);
-								break;
-							case 2:
-								try {
-									estacionamento.get(index).listarAllEventos();
-								} catch (ObjetoNaoEncontradoException e) {
-									println("Nenhum Evento Cadastrado!!!");
-									decor("-=-", 15);
-									ok();
-									break;
-								}
-								
-								decor("-=-", 15);
-								
-								String evento2search = input("Insira o nome do Evento\n> ");
-								
-								Evento evento = null;
-								try {
-									evento = estacionamento.get(index).retornarEvento(evento2search);
-								} catch (ObjetoNaoEncontradoException e) {
-									println("O Evento digitado não existe!!!");
-									decor("-=-", 15);
-									ok();
-									break;
-								}
-								
-								AcessoEvento novoAcessoEvento = new AcessoEvento(placa, dataHoraEntrada, horaHoraSaida, evento);
-								
-								evento.adicionarAcessoEvento(novoAcessoEvento);
-		
-								break;
-							case 3:
-								Mensalista novoAcessoMensalista = new Mensalista(placa, dataHoraEntrada, horaHoraSaida, estacionamento.get(index));
-								estacionamento.get(index).adicionarAcesso(novoAcessoMensalista);
-								break;
-						}
-						
-						decor("-=-", 15);
-						ok();
-					} else if (opcaoAcesso == 1) { 
-						cls();
-						title("Acessos", "-=-", 15);
-	
-						println("Estacionamentos Disponiveis:");
-						decor("-=-", 15);
-						
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
-							break;
-						}
-						
-						printAllEstacionamentos(estacionamento);
-						
-						decor("-=-", 15);
-	
-						String nomeEstacionamento = input("Deseja escolher qual estacionamento?\n> ");
-						
-						decor("-=-", 15);
-	
-						try {
-							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
-							break;
-						}
-						
-						int index = 0;
-						for (int i = 0; i < estacionamento.size(); i++) {
-							if (estacionamento.get(i).getNome().equals(nomeEstacionamento)) {
-								index = i;
-								break;
-							}
-						}
-						
-						decor("-=-", 15);
-	
-						try {
-							estacionamento.get(index).listarAllAcessos();
-						} catch (ObjetoNaoEncontradoException e1) {
-							println("Nenhum Acesso Cadastrado!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-	
-						String placa2exclude = input("Deseja excluir qual Placa?\n> ");
-						
-						try {
-							estacionamento.get(index).excluirAcessoPelaPlaca(placa2exclude);
-						} catch (ObjetoNaoEncontradoException e) {
-							println("A placa digitada não existe!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-						ok();
-					} else if (opcaoAcesso == 2) { 
-						cls();
-						title("Acessos", "-=-", 15);
-						
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
-							break;
-						}
-						
-						for (int i = 0; i < estacionamento.size(); i++) {
-							try {
-								estacionamento.get(i).listarAllAcessos();
-							} catch (ObjetoNaoEncontradoException e) {
-								println("Nenhum Acesso Cadastrado!!!");
-								decor("-=-", 15);
-								ok();
-								break;
-							}
-						}
-						
-						decor("-=-", 15);
-						ok();
-					} else if (opcaoAcesso == 3) { 
-						cls();
-						title("Acessos", "-=-", 15);
-						println("Estacionamentos Disponiveis:");
-						decor("-=-", 15);
-	
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
-							break;
-						}
-						
-						printAllEstacionamentos(estacionamento);
-						
-						decor("-=-", 15);
-	
-						String nomeEstacionamento = input("Deseja escolher qual estacionamento?\n> ");
-						
-						decor("-=-", 15);
-	
-						try {
-							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
-							break;
-						}
-						
-						int index = 0;
-						for (int i = 0; i < estacionamento.size(); i++) {
-							if (estacionamento.get(i).getNome().equals(nomeEstacionamento)) {
-								index = i;
-								break;
-							}
-						}
-						
-						try {
-							estacionamento.get(index).listarAllAcessos();
-						} catch (ObjetoNaoEncontradoException e1) {
-							raiseError(true, "Nenhum Acesso Cadastrado!!!", "-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-	
-						String placa2edit = input("Deseja editar qual Placa?\n> ");
-	
-						
-	
-						printMenu("Acessos Edicao", "-=-", 15, itemsAcessoEdicao);
-						
-						Acesso acesso;
-						
-						try {
-							acesso = estacionamento.get(index).retornarAcesso(placa2edit);
-						} catch (ObjetoNaoEncontradoException e) {
-							println("A Placa digitado não existe!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						int opcaoEdicao = int_input("Deseja editar o que?\n> ");
-	
-						
-						if(opcaoEdicao == 0){
-							String placa = input("Nova Placa:\n> ");
-							
-							try {
-								validarInputString(placa);
-							} catch (DescricaoEmBrancoException e) {
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								break;
-							}
-							
-							acesso.setPlaca(placa);
-						} else if(opcaoEdicao == 1) {
-							String dataHoraEntrada = input("Nova Data Hora Entrada (dd/MM/yyyy HH:mm):\n> ");
-							
-							try {
-								validarInputString(dataHoraEntrada);
-							} catch (DescricaoEmBrancoException e) {
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								break;
-							}
-							
-							acesso.setDataHoraEntrada(dataHoraEntrada);
-						} else if(opcaoEdicao == 2) {
-							String horaHoraSaida = input("Nova Data Hora Saida (dd/MM/yyyy HH:mm):\n> ");
-							
-							try {
-								validarInputString(horaHoraSaida);
-							} catch (DescricaoEmBrancoException e) {
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								break;
-							}
-							
-							acesso.setDataHoraSaida(horaHoraSaida);
-						} else {
-							raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-							break;
-						}
-						
-						decor("-=-", 15);
-						ok();
-					} else if (opcaoAcesso == 4) { 
-						cls();
-						title("Acessos", "-=-", 15);
-						println("Estacionamentos Disponiveis:");
-						decor("-=-", 15);
-	
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
-							break;
-						}
-						
-						printAllEstacionamentos(estacionamento);
-						
-						decor("-=-", 15);
-	
-						String nomeEstacionamento = input("Deseja escolher qual estacionamento?\n> ");
-						
-						decor("-=-", 15);
-						
-						try {
-							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
-							break;
-						}
-	
-						int index = 0;
-						for (int i = 0; i < estacionamento.size(); i++) {
-							if (estacionamento.get(i).getNome().equals(nomeEstacionamento)) {
-								index = i;
-								break;
-							}
-						}
-						
-						try {
-							estacionamento.get(index).listarAllAcessos();
-						} catch (ObjetoNaoEncontradoException e1) {
-							println("Nenhum Acesso Cadastrado!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-	
-						String placa2search = input("Deseja pesquisar qual Placa?\n> ");
-	
-						try {
-							estacionamento.get(index).exibirAcessoPelaPlaca(placa2search);
-						} catch (ObjetoNaoEncontradoException e) {
-							println("A Placa digitado não existe!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-						ok();
-					} else if (opcaoAcesso == 5) {  
-						cls();
-						title("Acessos", "-=-", 15);
-						println("Estacionamentos Disponiveis:");
-						decor("-=-", 15);
-	
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
-							break;
-						}
-						
-						printAllEstacionamentos(estacionamento);
-						
-						decor("-=-", 15);
-	
-						String nomeEstacionamento = input("Deseja escolher qual estacionamento?\n> ");
-						
-						decor("-=-", 15);
-	
-						try {
-							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
-							break;
-						}
-						
-						int index = 0;
-						for (int i = 0; i < estacionamento.size(); i++) {
-							if (estacionamento.get(i).getNome().equals(nomeEstacionamento)) {
-								index = i;
-								break;
-							}
-						}
-						
-						try {
-							println("Eventos disponiveis: ");
-							estacionamento.get(index).listarAllEventos();
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Nenhum Evento foi criado!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-						
-						
-						String eventoEscolha = input("Deseja escolher qual evento?\n> ");
-						
-						decor("-=-", 15);
-						
-						Evento evento = null;
-						try {
-							evento = estacionamento.get(index).retornarEvento(eventoEscolha);
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Evento digitado ainda nao foi cadastrado!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						try {
-							println("Acessos Evento disponiveis: ");
-							evento.listarAllAcessosEventos();
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Nenhum acesso evento cadastrado!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-						
-						String placa2edit = input("Deseja editar qual placa?\n> ");
-						
-						decor("-=-", 15);
-						
-						AcessoEvento acessoEvento = null;
-						try {
-							acessoEvento = evento.retornarAcessoEventoPelaPlaca(placa2edit);
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Nenhum acesso evento com essa placa foi cadastrada!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-						printMenu("Acessos Edicao", "-=-", 15, itemsAcessoEdicao);
-						
-						int escolha = int_input("O que deseja editar?\n> ");
-						
-						if(escolha == 0) {
-							String placa = input("Nova Placa:\n> ");
-							
-							try {
-								validarInputString(placa);
-							} catch (DescricaoEmBrancoException e) {
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								break;
-							}
-							
-							acessoEvento.setPlaca(placa);
-						} else if(escolha == 1) {
-							String dataHoraEntrada = input("Nova Data Hora Entrada (dd/MM/yyyy HH:mm):\n> ");
-							
-							try {
-								validarInputString(dataHoraEntrada);
-							} catch (DescricaoEmBrancoException e) {
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								break;
-							}
-							
-							acessoEvento.setDataHoraEntrada(dataHoraEntrada);
-						} else if(escolha == 2) {
-							String dataHoraSaida = input("Nova Data Hora Saida (dd/MM/yyyy HH:mm):\n> ");
-							
-							try {
-								validarInputString(dataHoraSaida);
-							} catch (DescricaoEmBrancoException e) {
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								break;
-							}
-							acessoEvento.setDataHoraSaida(dataHoraSaida);
-						}
-						
-						decor("-=-", 15);
-						ok();
-					} else if (opcaoAcesso == 6) { 
-						cls();
-						title("Acessos", "-=-", 15);
-						println("Estacionamentos Disponiveis:");
-						decor("-=-", 15);
-	
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
-							break;
-						}
-						
-						printAllEstacionamentos(estacionamento);
-						
-						decor("-=-", 15);
-	
-						String nomeEstacionamento = input("Deseja escolher qual estacionamento?\n> ");
-						
-						decor("-=-", 15);
-	
-						try {
-							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
-							break;
-						}
-						
-						int index = 0;
-						for (int i = 0; i < estacionamento.size(); i++) {
-							if (estacionamento.get(i).getNome().equals(nomeEstacionamento)) {
-								index = i;
-								break;
-							}
-						}
-						
-						try {
-							println("Eventos disponiveis: ");
-							estacionamento.get(index).listarAllEventos();
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Nenhum Evento foi criado!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-						
-						
-						String eventoEscolha = input("Deseja escolher qual evento?\n> ");
-						
-						decor("-=-", 15);
-						
-						Evento evento = null;
-						try {
-							evento = estacionamento.get(index).retornarEvento(eventoEscolha);
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Evento digitado ainda nao foi cadastrado!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						try {
-							println("Acessos Evento disponiveis: ");
-							evento.listarAllAcessosEventos();
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Nenhum acesso evento cadastrado!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-						
-						String placa2edit = input("Deseja editar qual placa?\n> ");
-						
-						decor("-=-", 15);
-						
-						AcessoEvento acessoEvento = null;
-						try {
-							acessoEvento = evento.retornarAcessoEventoPelaPlaca(placa2edit);
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Nenhum acesso evento com essa placa foi cadastrada!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-						
-						acessoEvento.listAllAtributtes();
-						
-						decor("-=-", 15);
-						ok();
-						break;
-					} else if (opcaoAcesso == 7) { 
-						cls();
-						title("Acessos", "-=-", 15);
-						println("Estacionamentos Disponiveis:");
-						decor("-=-", 15);
-	
-						try {
-							verificarListEstacionamentos(estacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "Nenhum Estacionamento foi criado", "-=-", 15);
-							break;
-						}
-						
-						printAllEstacionamentos(estacionamento);
-						
-						decor("-=-", 15);
-	
-						String nomeEstacionamento = input("Deseja escolher qual estacionamento?\n> ");
-						
-						decor("-=-", 15);
-	
-						try {
-							verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
-						} catch (ObjetoNaoEncontradoException e) {
-							raiseError(true, "O Estacionamento digitado não existe!!!", "-=-", 15);
-							break;
-						}
-						
-						int index = 0;
-						for (int i = 0; i < estacionamento.size(); i++) {
-							if (estacionamento.get(i).getNome().equals(nomeEstacionamento)) {
-								index = i;
-								break;
-							}
-						}
-						
-						try {
-							println("Eventos disponiveis: ");
-							estacionamento.get(index).listarAllEventos();
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Nenhum Evento foi criado!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-						
-						
-						String eventoEscolha = input("Deseja escolher qual evento?\n> ");
-						
-						decor("-=-", 15);
-						
-						Evento evento = null;
-						try {
-							evento = estacionamento.get(index).retornarEvento(eventoEscolha);
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Evento digitado ainda nao foi cadastrado!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						try {
-							println("Acessos Evento disponiveis: ");
-							evento.listarAllAcessosEventos();
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Nenhum acesso evento cadastrado!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-						
-						String placa2exclude = input("Deseja editar qual placa?\n> ");
-						
-						decor("-=-", 15);
-						
-						try {
-							evento.excluirAcessoEventoPelaPlaca(placa2exclude);
-						} catch (ObjetoNaoEncontradoException e) {
-							println("Essa placa ainda nao foi cadastrada!!!");
-							decor("-=-", 15);
-							ok();
-							break;
-						}
-						
-						decor("-=-", 15);
-						ok();
-					} else if(opcaoAcesso == 8) {
-						break;
-					}
-					
-				} else if (opcao == 2) { // Eventos
-					int opcaoEvento = inputMenu("Eventos", "-=-", 15, itemsEvento);
-					switch (opcaoEvento) {
-						case 0: 
-							cls();
-							title("Eventos", "-=-", 15);
-							println("Estacionamentos Disponiveis:");
-							decor("-=-", 15);
-							
-							try {
-								verificarListEstacionamentos(estacionamento);
-							} catch (ObjetoNaoEncontradoException e) {
-								raiseError(true, "Nenhum Estacionamento foi criado!!!", "-=-", 15);
-								break;
-							}
-							
-							printAllEstacionamentos(estacionamento);
-				
-							
-							decor("-=-", 15);
-							
-							String nomeEstacionamento = input("Deseja alocar em qual estacionamento?\n> ");
-							
-							decor("-=-", 15);
-		
-							try {
-								verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
-							} catch (ObjetoNaoEncontradoException e1) {
-								println("O Estacionamento digitado não existe!!!");
-								decor("-=-", 15);
-								ok();
-								break;
-							}
-							
-							int index = 0;
-							for (int i = 0; i < estacionamento.size(); i++) {
-								if (estacionamento.get(i).getNome().equals(nomeEstacionamento)) {
-									index = i;
-									break;
-								}
-							}
-							
-							String nomeEvento = input("Insira o nome do Evento\n> ");
-							
-							try {
-								validarInputString(nomeEvento);
-							} catch (DescricaoEmBrancoException e3) {
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								break;
-							}
-							
-							String dataHoraEventoInicio = input("Data e Hora do inicio do Evento (dd/MM/yyyy HH:mm):\n> ");
-							
-							try {
-								validarInputString(dataHoraEventoInicio);
-							} catch (DescricaoEmBrancoException e3) {
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								break;
-							}
-							
-							String dataHoraEventoFim = input("Data e Hora do fim do Evento (dd/MM/yyyy HH:mm):\n> ");
-							
-							try {
-								validarInputString(dataHoraEventoFim);
-							} catch (DescricaoEmBrancoException e3) {
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								break;
-							}
-							
-							float valorEvento = float_input("Valor do Evento:\n> ");
-							
-							try {
-								validarInputString(String.valueOf(valorEvento));
-								validarInputNum(valorEvento);
-							} catch (DescricaoEmBrancoException e) {
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								decor("-=-", 15);
-								ok();
-								break;
-							} catch (ValorAcessoInvalidoException e2) {
-								raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-								break;
-							} catch (NumberFormatException e1) {
-								println("A entrada deve ser um número!!!");
-								break;
-							} 
-							
-							estacionamento.get(index).cadastrarEvento(nomeEvento, dataHoraEventoInicio, dataHoraEventoFim, valorEvento);
-							
-							decor("-=-", 15);
-							ok();
-							break;
-	
-						case 1: 
-							cls();
-							title("Eventos", "-=-", 15);
-							println("Estacionamentos Disponiveis:");
-							decor("-=-", 15);
-							
-							try {
-								verificarListEstacionamentos(estacionamento);
-							} catch (ObjetoNaoEncontradoException e) {
-								raiseError(true, "Nenhum Estacionamento foi criado!!!", "-=-", 15);
-								break;
-							}
-							
-							printAllEstacionamentos(estacionamento);
-							
-							decor("-=-", 15);
-							
-							nomeEstacionamento = input("Deseja alocar em qual estacionamento?\n> ");
-							
-							decor("-=-", 15);
-							
-							try {
-								verificarListEstacionamentosPeloNome(estacionamento, nomeEstacionamento);
-							} catch (ObjetoNaoEncontradoException e1) {
-								println("O Estacionamento digitado não existe!!!");
-								decor("-=-", 15);
-								ok();
-								break;
-							}
-		
-							index = 0;
-							for (int i = 0; i < estacionamento.size(); i++) {
-								if (estacionamento.get(i).getNome().equals(nomeEstacionamento)) {
-									index = i;
-									break;
-								}
-							}
-							
-							try {
-								estacionamento.get(index).listarAllEventos();
-							} catch (ObjetoNaoEncontradoException e1) {
-								println("Nenhum Evento Cadastrado!!!");
-								decor("-=-", 15);
-								ok();
-								break;
-							}
-							
-							decor("-=-", 15);
-							
-							String nome2delete = input("Digite o Evento a ser apagado:\n> ");
-	
-							try {
-								estacionamento.get(index).apagarEventoPeloNome(nome2delete);
-							} catch (ObjetoNaoEncontradoException e2) {
-								println("O Evento digitado não existe!!!");
-								decor("-=-", 15);
-								ok();
-								break;
-							}
-							
-							ok();
-							break;
-	
-						case 2: 
-							cls();
-							title("Evento", "-=-", 15);
-							
-							for (int i = 0; i < estacionamento.size(); i++) {
-								try {
-									estacionamento.get(i).listarAllEventos();
-								} catch (ObjetoNaoEncontradoException e1) {
-									println("Nenhum Evento Cadastrado!!!");
-									decor("-=-", 15);
-									ok();
-									break;
-								}
-							}
-							
-							decor("-=-", 15);
-							ok();
-							break;
-	
-						case 3: 
-							cls();
-							title("Editando Evento", "-=-", 15);
-	
-							try {
-								verificarListEstacionamentos(estacionamento);
-							} catch (ObjetoNaoEncontradoException e) {
-								raiseError(true, "Nenhum Estacionamento foi criado!!!", "-=-", 15);
-								break;
-							}
-		
-							printAllEstacionamentos(estacionamento);
-		
-							decor("-=-", 15);
-							String objeto2edit = input("Insira o nome do estacionamento\n> ");
-							
-							try {
-								verificarListEstacionamentosPeloNome(estacionamento, objeto2edit);
-							} catch (ObjetoNaoEncontradoException e1) {
-								println("O Estacionamento digitado não existe!!!");
-								decor("-=-", 15);
-								ok();
-								break;
-							}
-			
-							index = 0;
-							for (int i = 0; i < estacionamento.size(); i++) {
-								if (estacionamento.get(i).getNome().equals(objeto2edit)) {
-									index = i;
-									try {
-										estacionamento.get(i).listarAllEventos();
-									} catch (ObjetoNaoEncontradoException e) {
-										println("Nenhum Evento Cadastrado!!!");
-										decor("-=-", 15);
-										ok();
+							boolean unique;
+							String objeto2edit = estacionamento.get(index).getNome();
+							int opcaoEdicao = -1;
+							while(opcaoEdicao != itemsEdicao.length - 1){
+								opcaoEdicao = inputMenu("Estacionamentos Edicao", global_decor, global_decor_size, itemsEdicao);
+								switch (opcaoEdicao) {
+									case 0:
+										String nomeedit = "";
+										unique = false;
+										while(!unique){
+											cls();
+											title("EDITANDO ESTACIONAMENTO: " + objeto2edit, global_decor, global_decor_size);
+											nomeedit = input("Novo nome\n> ");
+											if(empty_str(nomeedit,"-=-",15)){
+												continue;
+											}
+											unique = unique_string(nomeedit,get_nomes(estacionamento));
+										}
+										decor(global_decor, global_decor_size);
+										println("Editado: " + estacionamento.get(index).getNome() + " >>> " + nomeedit);
+										estacionamento.get(index).setNome(nomeedit);
 										break;
-									}
-									break;
+										
+									case 1:
+										int capacidadeedit = 0;
+										while(capacidadeedit <= 0){
+											try{
+												cls();
+												title("EDITANDO ESTACIONAMENTO: " + objeto2edit, global_decor, global_decor_size);
+												capacidadeedit = int_input("Nova capacidade\n> ");
+												raiseError(capacidadeedit <= 0, "O NÚMERO PRECISAR SER MAIOR DO QUE ZERO", global_decor, global_decor_size);
+											} catch (Exception e){
+												raiseError(true, "O VALOR PRECISA SER UM NUMERO", global_decor, global_decor_size);
+											}
+										}
+										println("Editado: " + estacionamento.get(index).getCapacidade() + " >>> " + capacidadeedit);
+										estacionamento.get(index).setCapacidade(capacidadeedit);
+										break;
+		
+									case 2:
+										float valorDiariaDiurna2edit = 0;
+										while(valorDiariaDiurna2edit <= 0){
+											try{
+												cls();
+												title("EDITANDO ESTACIONAMENTO: " + objeto2edit, global_decor, global_decor_size);
+												valorDiariaDiurna2edit = float_input("Novo Valor da Diaria Diurna:\n> ");
+												raiseError(valorDiariaDiurna2edit <= 0, "O NÚMERO PRECISAR SER MAIOR DO QUE ZERO", global_decor, global_decor_size);
+											} catch (Exception e){
+												raiseError(true, "O VALOR PRECISA SER UM NUMERO", global_decor, global_decor_size);
+											}
+										}
+										println("Editado: " + estacionamento.get(index).getValorDiariaDiurna() + " >>> " + valorDiariaDiurna2edit);
+										estacionamento.get(index).setValorDiariaDiurna(valorDiariaDiurna2edit);
+										break;
+		
+									case 3:
+										float porcDiariaNoturna2edit = 0;
+										while(porcDiariaNoturna2edit <= 0){
+											try{
+												cls();
+												title("EDITANDO ESTACIONAMENTO: " + objeto2edit, global_decor, global_decor_size);
+												porcDiariaNoturna2edit = float_input("Nova Porcentagem Diaria Noturna:\n> ");
+												raiseError(porcDiariaNoturna2edit <= 0, "O NÚMERO PRECISAR SER MAIOR DO QUE ZERO", global_decor, global_decor_size);
+											} catch (Exception e){
+												raiseError(true, "O VALOR PRECISA SER UM NUMERO", global_decor, global_decor_size);
+											}
+										}
+										println("Editado: " + estacionamento.get(index).getPorcDiariaNoturna() + " >>> " + porcDiariaNoturna2edit);
+										estacionamento.get(index).setPorcDiariaNoturna(porcDiariaNoturna2edit);
+										break;
+		
+									case 4:
+										float valorFracaoQuinzeedit = 0;
+										while(valorFracaoQuinzeedit <= 0){
+											try{
+												cls();
+												title("EDITANDO ESTACIONAMENTO: " + objeto2edit, global_decor, global_decor_size);
+												valorFracaoQuinzeedit = float_input("Novo Valor da Fracao Quinze:\n> ");
+												raiseError(valorFracaoQuinzeedit <= 0, "O NÚMERO PRECISAR SER MAIOR DO QUE ZERO", global_decor, global_decor_size);
+											} catch (Exception e){
+												raiseError(true, "O VALOR PRECISA SER UM NUMERO", global_decor, global_decor_size);
+											}
+										}
+										println("Editado: " + estacionamento.get(index).getValorFracaoQuinze() + " >>> " + valorFracaoQuinzeedit);
+										estacionamento.get(index).setValorFracaoQuinze(valorFracaoQuinzeedit);
+										break;
+		
+									case 5:
+										float porcHoraCheia2edit = 0;
+										while(porcHoraCheia2edit <= 0){
+											try{
+												cls();
+												title("EDITANDO ESTACIONAMENTO: " + objeto2edit, global_decor, global_decor_size);
+												porcHoraCheia2edit = float_input("Nova Porcentagem Hora Cheia:\n> ");
+												raiseError(porcHoraCheia2edit <= 0, "O NÚMERO PRECISAR SER MAIOR DO QUE ZERO", global_decor, global_decor_size);
+											} catch (Exception e){
+												raiseError(true, "O VALOR PRECISA SER UM NUMERO", global_decor, global_decor_size);
+											}
+										}
+										println("Editado: " + estacionamento.get(index).getPorcHoraCheia() + " >>> " + porcHoraCheia2edit);
+										estacionamento.get(index).setPorcHoraCheia(porcHoraCheia2edit);
+										break;
+		
+									case 6:
+										float valorMensalista2edit = 0;
+										while(valorMensalista2edit <= 0){
+											try{
+												cls();
+												title("EDITANDO ESTACIONAMENTO: " + objeto2edit, global_decor, global_decor_size);
+												valorMensalista2edit = float_input("Novo valor mensalista:\n> ");
+												raiseError(valorMensalista2edit <= 0, "O NÚMERO PRECISAR SER MAIOR DO QUE ZERO", global_decor, global_decor_size);
+											} catch (Exception e){
+												raiseError(true, "O VALOR PRECISA SER UM NUMERO", global_decor, global_decor_size);
+											}
+										}
+										println("Editado: " + estacionamento.get(index).getValorMensalista() + " >>> " + valorMensalista2edit);
+										estacionamento.get(index).setValorMensalista(valorMensalista2edit);
+										break;
+										
+									case 7:
+										break;
 								}
 							}
-		
-							String evento2edit = input("Nome do evento a ser editado\n> ");
-							
-							cls();
-							
-							Evento evento;
-							try {
-								evento = estacionamento.get(index).retornarEvento(evento2edit);
-							} catch (ObjetoNaoEncontradoException e1) {
-								println("O Evento digitado não existe!!!");
-								decor("-=-", 15);
-								ok();
-								break;
+							finish(global_decor, global_decor_size);
+						} 
+						
+						// "Pesquisar estacionamento",
+						else if (opcaoEstacionamento == 4) { 
+							int index = index_of_estacionamento("Estacionamentos Disponiveis", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
 							}
-							
-							
+							cls();
+							title("Estacionamento " + estacionamento.get(index).getNome(), global_decor, global_decor_size);
+							estacionamento.get(index).listarAllAtributtes();
+							finish(global_decor, global_decor_size);
+						} 
+						
+						// "Voltar"
+						else if(opcaoEstacionamento == 5) { 
+							continue;
+						}
+					}
+				} 
+
+				// Acesso
+				else if (opcao == 1) { 
+					int opcaoAcesso = -1;
+					while(opcaoAcesso != 8){
+						opcaoAcesso = inputMenu("Acessos", global_decor, global_decor_size, itemsAcesso);
+						
+						// "Cadastrar acesso",
+						if (opcaoAcesso == 0) { 
+							int tipoAcesso = inputMenu("Cadastro de acesso", global_decor, global_decor_size, itemsCadastroAcesso);
+							if(tipoAcesso == 4){
+								continue;
+							}
 	
-							printMenu("Evento Edicao", "-=-", 15, itemsEventoEdicao);
-							int opcaoEdicao = int_input("O que deseja editar\n> ");
-							switch (opcaoEdicao) {
+							int index = index_of_estacionamento("Estacionamento", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
+							}
+							String nomeEstacionamento = estacionamento.get(index).getNome();
+	
+							Map<String,String> acessItems = new HashMap<>();
+							String placa = "",dataHoraEntrada,horaHoraSaida;
+							while(placa.equalsIgnoreCase(" ") || placa.isEmpty()){
+								cls();
+								title("Cadastro de Acesso [ESTACIONAMENTO: " + nomeEstacionamento + "]", global_decor, global_decor_size);
+								placa = input("Insira a placa\n> ");
+								raiseError((placa.equalsIgnoreCase(" ") || placa.isEmpty()), "A STRING NÃO PODE ESTAR VAZIA", global_decor, global_decor_size);
+							}
+							acessItems.put("Placa", placa);
+							
+							dataHoraEntrada = input_str_view_cad("Nova Data Hora Entrada (dd/MM/yyyy HH:mm):\n> ","Cadastro de Acesso [ESTACIONAMENTO: " + nomeEstacionamento + "]", global_decor, global_decor_size, acessItems);
+							acessItems.put("Entrada", dataHoraEntrada);
+	
+							horaHoraSaida = input_str_view_cad("Nova Data Hora Saida (dd/MM/yyyy HH:mm):\n> ","Cadastro de Acesso [ESTACIONAMENTO: " + nomeEstacionamento + "]", global_decor, global_decor_size, acessItems);
+							acessItems.put("Saida", horaHoraSaida);
+							view_cad("Cadastro de Acesso [ESTACIONAMENTO: " + nomeEstacionamento + "]", global_decor, global_decor_size, acessItems);
+	
+							switch (tipoAcesso) {
 								case 0:
-									String nome2edit = input("Novo Nome Evento\n> ");
-									
-									try {
-										validarInputString(nome2edit);
-									} catch (DescricaoEmBrancoException e2) {
-										raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-										break;
-									}
-									
-									evento.setNomeEvento(nome2edit);
+									Diaria novoAcessoDiario = new Diaria(placa, dataHoraEntrada, horaHoraSaida, estacionamento.get(index));
+									estacionamento.get(index).adicionarAcesso(novoAcessoDiario);
 									break;
+	
 								case 1:
-									String dataHoraInicio = input("Nova Data e Hora inicial do Evento (dd/MM/yyyy HH:mm)\n> ");
-									
-									try {
-										validarInputString(dataHoraInicio);
-									} catch (DescricaoEmBrancoException e2) {
-										raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-										break;
-									}
-									
-									evento.setDataHoraEventoInicio(dataHoraInicio);
+									PorTempo novoAcessoPorTempo = new PorTempo(placa, dataHoraEntrada, horaHoraSaida, estacionamento.get(index));
+									estacionamento.get(index).adicionarAcesso(novoAcessoPorTempo);
 									break;
+	
 								case 2:
-									String dataHoraFim = input("Nova Data e Hora inicial do Evento (dd/MM/yyyy HH:mm)\n> ");
-									
-									try {
-										validarInputString(dataHoraFim);
-									} catch (DescricaoEmBrancoException e2) {
-										raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-										decor("-=-", 15);
-										ok();
+									int ev_index = index_of_evento(index, estacionamento, global_decor, global_decor_size);
+									if(ev_index == -1){
 										break;
 									}
-									
-									evento.setDataHoraEventoFim(dataHoraFim);
+									String evento2search = estacionamento.get(index).getEventos().get(ev_index).getNomeEvento();
+									List<Evento> evnts = estacionamento.get(index).getEventos();
+									Evento evento = evnts.get(eventoIndex(evnts,evento2search));
+									if(evento == null){
+										raiseError((evento == null), "O EVENTO "+ evento2search +" NÃO EXISTE", global_decor, global_decor_size);
+										break;
+									}
+
+									AcessoEvento novoAcessoEvento = new AcessoEvento(placa, dataHoraEntrada, horaHoraSaida, evento);
+									evento.adicionarAcessoEvento(novoAcessoEvento);
 									break;
 								case 3:
-									float novoValorEvento = float_input("Novo Valor do Evento\n>");
-									
-									try {
-										validarInputString(String.valueOf(novoValorEvento));
-									} catch (DescricaoEmBrancoException e2) {
-										raiseError(true, "Entrada Invalida!!!", "-=-", 15);
-										break;
-									}
-									
-									evento.setValorEvento(novoValorEvento);
-									break;
-								default:
-									raiseError(true, "Entrada Invalida!!!", "-=-", 15);
+									Mensalista novoAcessoMensalista = new Mensalista(placa, dataHoraEntrada, horaHoraSaida, estacionamento.get(index));
+									estacionamento.get(index).adicionarAcesso(novoAcessoMensalista);
 									break;
 							}
-		
-							decor("-=-", 15);
 							ok();
-							break;
-	
-						case 4: 
-							cls();
-							title("Evento", "-=-", 15);
-	
-							try {
-								verificarListEstacionamentos(estacionamento);
-							} catch (ObjetoNaoEncontradoException e) {
-								raiseError(true, "Nenhum Estacionamento foi criado!!!", "-=-", 15);
-								break;
+						} 
+						
+						// "Excluir acesso",
+						else if (opcaoAcesso == 1) { 
+							int index = index_of_estacionamento("Estacionamentos Disponiveis [Acessos]", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
 							}
-							
-							printAllEstacionamentos(estacionamento);
-		
-							decor("-=-", 15);
-							
-							String estacionamento2search = input("Insira o nome do estacionamento\n> ");
-		
-							decor("-=-", 15);
-							
-							try {
-								verificarListEstacionamentosPeloNome(estacionamento, estacionamento2search);
-							} catch (ObjetoNaoEncontradoException e1) {
-								println("O Estacionamento digitado não existe!!!");
-								decor("-=-", 15);
-								ok();
-								break;
+							int ac_index = index_of_acesso(index, estacionamento, global_decor, global_decor_size);
+							if(ac_index == -1){
+								continue;
 							}
-							
-							index = 0;
-							for (int i = 0; i < estacionamento.size(); i++) {
-								if (estacionamento.get(i).getNome().equals(estacionamento2search)) {
-									index = i;
-									try {
-										estacionamento.get(i).listarAllEventos();
-									} catch (ObjetoNaoEncontradoException e) {
-										println("Nenhum Evento Cadastrado!!!");
-										decor("-=-", 15);
-										ok();
-										break;
-									}
-									break;
+							estacionamento.get(index).getAcessos().remove(ac_index);
+							finish(global_decor, global_decor_size);
+						} 
+						
+						// "Listar acesso",
+						else if (opcaoAcesso == 2) { 
+							int count = 0;
+							if(!title_for_estacionamentos("Estacionamentos Disponiveis [Acessos]", estacionamento, global_decor, global_decor_size)){
+								continue;
+							}
+							for(Estacionamento i: estacionamento){
+								if(i.getAcessos().size() > 0){
+									println("Estacionamento: " + i.getNome());
+									view_acessos_details(i.getAcessos());
+									count++;
 								}
 							}
-		
-							decor("-=-", 15);
-							
-							String evento2search = input("Nome do evento a pesquisar:\n> ");
-							
-							try {
-								evento = estacionamento.get(index).retornarEvento(evento2search);
-							} catch (ObjetoNaoEncontradoException e) {
-								println("O Evento digitado não existe!!!");
-								decor("-=-", 15);
+							if(count > 0){
+								finish(global_decor, global_decor_size);
+							} else {
+								title("NENHUM ACESSO CADASTRADO", global_decor, global_decor_size);
 								ok();
-								break;
+							}
+						} 
+						
+						// "Editar acesso",
+						else if (opcaoAcesso == 3) { 
+							int index = index_of_estacionamento("Estacionamentos Disponiveis [Acessos]", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
+							}
+							int ac_index = index_of_acesso(index, estacionamento, global_decor, global_decor_size);
+							if(ac_index == -1){
+								continue;
+							}
+							Acesso acesso = estacionamento.get(index).getAcessos().get(ac_index);
+							String nomeEstacionamento = estacionamento.get(index).getNome();
+
+							int opcaoEdicao = -1;
+							while(opcaoEdicao != 3){
+								opcaoEdicao = inputMenu("Acessos Edicao", global_decor, global_decor_size, itemsAcessoEdicao);
+								if(opcaoEdicao == 0){
+									String placa = "";
+									while(placa.equalsIgnoreCase(" ") || placa.isEmpty()){
+										cls();
+										title("Edicao de Acesso [ESTACIONAMENTO: " + nomeEstacionamento + "]", global_decor, global_decor_size);
+										placa = input("Insira a nova placa\n> ");
+										raiseError((placa.equalsIgnoreCase(" ") || placa.isEmpty()), "A STRING NÃO PODE ESTAR VAZIA", global_decor, global_decor_size);
+									}
+									acesso.setPlaca(placa);
+								} 
+								
+								else if(opcaoEdicao == 1) {
+									String dataHoraEntrada = "";
+									while(dataHoraEntrada.equalsIgnoreCase(" ") || dataHoraEntrada.isEmpty()){
+										cls();
+										title("Edicao de Acesso [ESTACIONAMENTO: " + nomeEstacionamento + "]", global_decor, global_decor_size);
+										dataHoraEntrada = input("Nova Data Hora Entrada (dd/MM/yyyy HH:mm):\n> ");
+										raiseError((dataHoraEntrada.equalsIgnoreCase(" ") || dataHoraEntrada.isEmpty()), "A STRING NÃO PODE ESTAR VAZIA", global_decor, global_decor_size);
+									}
+									acesso.setDataHoraEntrada(dataHoraEntrada);
+								} 
+								
+								else if(opcaoEdicao == 2) {
+									String horaHoraSaida = "";
+									while(horaHoraSaida.equalsIgnoreCase(" ") || horaHoraSaida.isEmpty()){
+										cls();
+										title("Edicao de Acesso [ESTACIONAMENTO: " + nomeEstacionamento + "]", global_decor, global_decor_size);
+										horaHoraSaida = input("Nova Data Hora Saida (dd/MM/yyyy HH:mm):\n> ");
+										raiseError((horaHoraSaida.equalsIgnoreCase(" ") || horaHoraSaida.isEmpty()), "A STRING NÃO PODE ESTAR VAZIA", global_decor, global_decor_size);
+									}
+									acesso.setDataHoraSaida(horaHoraSaida);
+								} 
+								
+								else {
+									raiseError(true, "Entrada Invalida!!!", global_decor, global_decor_size);
+									continue;
+								}
+							} 
+							finish(global_decor, global_decor_size);
+						} 
+						
+						// "Pesquisar acesso",
+						else if (opcaoAcesso == 4) { 
+							int index = index_of_estacionamento("Estacionamentos Disponiveis [Acessos]", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
+							}
+							int ac_index = index_of_acesso(index, estacionamento, global_decor, global_decor_size);
+							if(ac_index == -1){
+								continue;
+							}
+							Acesso acesso = estacionamento.get(index).getAcessos().get(ac_index);
+							view_acesso(acesso);
+							finish(global_decor, global_decor_size);
+						} 
+						
+						// "Editar acesso Evento",
+						else if (opcaoAcesso == 5) {  
+							int index = index_of_estacionamento("Estacionamentos Disponiveis [Acessos]", estacionamento,global_decor, global_decor_size);
+							if(index == -1){
+								continue;
+							}
+							String nomeEstacionamento = estacionamento.get(index).getNome();
+							int ev_index = index_of_evento(index, estacionamento, global_decor, global_decor_size);
+							if(ev_index == -1){
+								continue;
+							}
+							String eventoEscolha = estacionamento.get(index).getEventos().get(ev_index).getNomeEvento();
+							List<Evento> evnts = estacionamento.get(index).getEventos();
+							Evento evento = evnts.get(eventoIndex(evnts,eventoEscolha));
+							if(evento == null){
+								raiseError((evento == null), "O EVENTO "+ eventoEscolha +" NÃO EXISTE", global_decor, global_decor_size);
+								continue;
+							}
+							int aec_index = index_of_acesso_evento(evento, global_decor, global_decor_size);
+							if(aec_index == -1){
+								continue;
+							}
+							// String placa2edit = evento.getAcessoEventos().get(aec_index).getPlaca();
+							AcessoEvento acessoEvento = evento.getAcessoEventos().get(aec_index);
+							
+							int escolha = inputMenu("Acessos Edicao", global_decor, global_decor_size, itemsAcessoEdicao);
+							if(escolha == 0) {
+								String placa = "";
+								while(placa.equalsIgnoreCase(" ") || placa.isEmpty()){
+									cls();
+									title("Edicao de Acesso [ESTACIONAMENTO: " + nomeEstacionamento + "]", global_decor, global_decor_size);
+									placa = input("Insira a nova placa\n> ");
+									raiseError((placa.equalsIgnoreCase(" ") || placa.isEmpty()), "A STRING NÃO PODE ESTAR VAZIA", global_decor, global_decor_size);
+								}
+								acessoEvento.setPlaca(placa);
+							} 
+							
+							else if(escolha == 1) {
+								String dataHoraEntrada = input("Nova Data Hora Entrada (dd/MM/yyyy HH:mm):\n> ");
+								while(dataHoraEntrada.equalsIgnoreCase(" ") || dataHoraEntrada.isEmpty()){
+									cls();
+									title("Edicao de Acesso [ESTACIONAMENTO: " + nomeEstacionamento + "]", global_decor, global_decor_size);
+									dataHoraEntrada = input("Nova Data Hora Entrada (dd/MM/yyyy HH:mm):\n> ");
+									raiseError((dataHoraEntrada.equalsIgnoreCase(" ") || dataHoraEntrada.isEmpty()), "A STRING NÃO PODE ESTAR VAZIA", global_decor, global_decor_size);
+								}
+								acessoEvento.setDataHoraEntrada(dataHoraEntrada);
+							} 
+							
+							else if(escolha == 2) {
+								String dataHoraSaida = "";
+								while(dataHoraSaida.equalsIgnoreCase(" ") || dataHoraSaida.isEmpty()){
+									cls();
+									title("Edicao de Acesso [ESTACIONAMENTO: " + nomeEstacionamento + "]", global_decor, global_decor_size);
+									dataHoraSaida = input("Nova Data Hora Saida (dd/MM/yyyy HH:mm):\n> ");
+									raiseError((dataHoraSaida.equalsIgnoreCase(" ") || dataHoraSaida.isEmpty()), "A STRING NÃO PODE ESTAR VAZIA", global_decor, global_decor_size);
+								}
+								acessoEvento.setDataHoraSaida(dataHoraSaida);
+							}
+							finish(global_decor, global_decor_size);
+						} 
+						
+						// "Pesquisar acesso Evento",
+						else if (opcaoAcesso == 6) { 
+							int index = index_of_estacionamento("Estacionamentos Disponiveis [Acessos]", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
+							}
+							int ev_index = index_of_evento(index, estacionamento, global_decor, global_decor_size);
+							if(ev_index == -1){
+								continue;
+							}
+							String eventoEscolha = estacionamento.get(index).getEventos().get(ev_index).getNomeEvento();
+							List<Evento> evnts = estacionamento.get(index).getEventos();
+							Evento evento = evnts.get(eventoIndex(evnts,eventoEscolha));
+							if(evento == null){
+								raiseError((evento == null), "O EVENTO "+ eventoEscolha +" NÃO EXISTE", global_decor, global_decor_size);
+								continue;
 							}
 							
-							evento.listarAllAtributtes();
+							int aec_index = index_of_acesso_evento(evento, global_decor, global_decor_size);
+							if(aec_index == -1){
+								continue;
+							}
+							// String placa2edit = evento.getAcessoEventos().get(aec_index).getPlaca();
 							
-							decor("-=-", 15);
-							ok();
+							AcessoEvento acessoEvento = evento.getAcessoEventos().get(aec_index);
+							view_acessoevento(acessoEvento);
+							finish(global_decor, global_decor_size);
 							break;
-	
-						default:
-							break;
+						} 
+						
+						// "Excluir acesso Evento",
+						else if (opcaoAcesso == 7) { 
+							int index = index_of_estacionamento("Estacionamentos Disponiveis [Acessos]", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
+							}
+							int ev_index = index_of_evento(index, estacionamento, global_decor, global_decor_size);
+							if(ev_index == -1){
+								continue;
+							}
+							String eventoEscolha = estacionamento.get(index).getEventos().get(ev_index).getNomeEvento();
+							List<Evento> evnts = estacionamento.get(index).getEventos();
+							Evento evento = evnts.get(eventoIndex(evnts,eventoEscolha));
+							if(evento == null){
+								raiseError((evento == null), "O EVENTO "+ eventoEscolha +" NÃO EXISTE", global_decor, global_decor_size);
+								continue;
+							}
+							int aec_index = index_of_acesso_evento(evento, global_decor, global_decor_size);
+							if(aec_index == -1){
+								continue;
+							}
+							// String placa2edit = evento.getAcessoEventos().get(aec_index).getPlaca();
+							
+							AcessoEvento acessoEvento = evento.getAcessoEventos().get(aec_index);
+							evento.getAcessoEventos().remove(acessoEvento);
+							finish(global_decor, global_decor_size);
+							continue;
+						} 
+						
+						// "Voltar"
+						else if(opcaoAcesso == 8) {
+							continue;
+						}
 					}
-				} else if (opcao == 3) { // Sair
+				} 
+				
+				// Eventos
+				else if (opcao == 2) { 
+					int opcaoEvento = -1;
+					while(opcaoEvento != 5){
+						opcaoEvento = inputMenu("Eventos", global_decor, global_decor_size, itemsEvento);
+						// "Cadastrar evento",
+						if(opcaoEvento == 0){
+							int index = index_of_estacionamento("Estacionamentos Disponiveis [Acessos]", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
+							}
+							// String nomeEstacionamento = estacionamento.get(index).getNome();
+							
+							String nomeEvento = "",dataHoraEventoInicio,dataHoraEventoFim;
+							Map<String,String> eventItems = new HashMap<>();
+							float valorEvento;
+							
+							while(nomeEvento.equalsIgnoreCase(" ") || nomeEvento.isEmpty()){
+								cls();
+								title("Cadastro de Evento", global_decor, global_decor_size);
+								nomeEvento = input("Insira o nome do Evento\n> ");
+								raiseError((nomeEvento.equalsIgnoreCase(" ") || nomeEvento.isEmpty()), "A STRING NÃO PODE ESTAR VAZIA", global_decor, global_decor_size);
+							}
+							eventItems.put("Nome", nomeEvento);
+							dataHoraEventoInicio = input_str_view_cad("Data e Hora do inicio do Evento (dd/MM/yyyy HH:mm):\n> ","Cadastrando Evento", global_decor, global_decor_size, eventItems);
+							eventItems.put("Inicio", dataHoraEventoInicio);
+	
+							dataHoraEventoFim = input_str_view_cad("Data e Hora do fim do Evento (dd/MM/yyyy HH:mm):\n> ","Cadastrando Evento", global_decor, global_decor_size, eventItems);
+							eventItems.put("Fim", dataHoraEventoFim);
+							view_cad("Cadastrando Evento", global_decor, global_decor_size, eventItems);
+
+							valorEvento = input_float_view_cad("Valor do Evento:\n> ","Cadastrando Evento", global_decor, global_decor_size, eventItems);
+							eventItems.put("Valor", float_str(valorEvento));
+							view_cad("Cadastrando Evento", global_decor, global_decor_size, eventItems);
+							
+							estacionamento.get(index).cadastrarEvento(nomeEvento, dataHoraEventoInicio, dataHoraEventoFim, valorEvento);
+							ok();
+							continue;
+						}
+						
+						// "Excluir evento",
+						else if(opcaoEvento == 1){
+							int index = index_of_estacionamento("Estacionamentos Disponiveis [Acessos]", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
+							}
+							String nomeEstacionamento = estacionamento.get(index).getNome();
+							int ev_index = index_of_evento(index, estacionamento, global_decor, global_decor_size);
+							if(ev_index == -1){
+								continue;
+							}
+							String eventoEscolha = estacionamento.get(index).getEventos().get(ev_index).getNomeEvento();
+							estacionamento.get(index).getEventos().remove(ev_index);
+							raiseError(true, "O EVENTO "+eventoEscolha+" foi apagado [ESTACIONAMENTO "+nomeEstacionamento+"]", global_decor, global_decor_size);
+							continue;
+						}
+						
+						// "Listar evento",
+						else if(opcaoEvento == 2){ 
+							cls();
+							title("Listar eventos", global_decor, global_decor_size);
+							int count = 0;
+							for(int i = 0; i < estacionamento.size(); i++){
+								if(estacionamento.get(i).getEventos().size() > 0){
+									println("Estacionamento: "+estacionamento.get(i).getNome());
+									view_eventos_details(estacionamento.get(i).getEventos());
+									if(i < estacionamento.size()){
+										println("");
+									}
+									count++;
+								}
+							}
+							if(estacionamento.size() == 0){
+								raiseError(true, "NÃO EXISTEM ESTACIONAMENTOS CADASTRADOS", global_decor, global_decor_size);
+							}
+							else if(count > 0){
+								finish(global_decor, global_decor_size);
+							} else {
+								raiseError(true,"NÃO EXISTEM EVENTOS CADASTRADOS", global_decor, global_decor_size);
+							}
+							continue;
+						}
+						
+						// "Editar evento",
+						else if(opcaoEvento == 3){ 
+							int index = index_of_estacionamento("Estacionamentos Disponiveis [Eventos]", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
+							}
+							int ev_index = index_of_evento(index, estacionamento, global_decor, global_decor_size);
+							if(ev_index == -1){
+								continue;
+							}
+							String evento2edit = estacionamento.get(index).getEventos().get(ev_index).getNomeEvento();
+							List<Evento> evnts = estacionamento.get(index).getEventos();
+							Evento evento = evnts.get(eventoIndex(evnts,evento2edit));
+							if(evento == null){
+								raiseError((evento == null), "O EVENTO "+ evento2edit +" NÃO EXISTE", global_decor, global_decor_size);
+								continue;
+							}
+	
+							int opcaoEdicao = -1;
+							while(opcaoEdicao != 4){
+								opcaoEdicao = inputMenu("Evento Edicao", global_decor, global_decor_size, itemsEventoEdicao);
+								switch (opcaoEdicao) {
+									case 0:
+										String nomeedit = "";
+										while(nomeedit.equalsIgnoreCase(" ") || nomeedit.isEmpty()){
+											cls();
+											title("Cadastro de Evento", global_decor, global_decor_size);
+											nomeedit = input("Insira o nome do Evento\n> ");
+											raiseError((nomeedit.equalsIgnoreCase(" ") || nomeedit.isEmpty()), "A STRING NÃO PODE ESTAR VAZIA", global_decor, global_decor_size);
+											if(raiseError(unique_string(nomeedit, get_nomes_eventos(evnts)), "ESTE NOME JÁ ESTÁ CADASTRADO NO SISTEMA!", global_decor, global_decor_size)){
+												continue;
+											}
+										}
+										evento.setNomeEvento(nomeedit);
+										continue;
+	
+									case 1:
+										String dataHoraInicio = input("Nova Data e Hora inicial do Evento (dd/MM/yyyy HH:mm)\n> ");
+										try {
+											validarInputString(dataHoraInicio);
+										} catch (DescricaoEmBrancoException e) {
+											raiseError(true, "Entrada Invalida!!!", global_decor, global_decor_size);
+											continue;
+										}
+										evento.setDataHoraEventoInicio(dataHoraInicio);
+										continue;
+	
+									case 2:
+										String dataHoraFim = input("Nova Data e Hora final do Evento (dd/MM/yyyy HH:mm)\n> ");
+										try {
+											validarInputString(dataHoraFim);
+										} catch (DescricaoEmBrancoException e) {
+											raiseError(true, "Entrada Invalida!!!", global_decor, global_decor_size);
+											continue;
+										}
+										evento.setDataHoraEventoFim(dataHoraFim);
+										continue;
+	
+									case 3:
+										float novoValorEvento = float_input("Novo Valor do Evento\n> ");
+										try {
+											validarInputString(String.valueOf(novoValorEvento));
+										} catch (DescricaoEmBrancoException e) {
+											raiseError(true, "Entrada Invalida!!!", global_decor, global_decor_size);
+											continue;
+										}
+										evento.setValorEvento(novoValorEvento);
+										continue;
+	
+									case 4:
+										break;
+								}
+							}
+							finish(global_decor, global_decor_size);
+							continue;
+						}
+						
+						// "Pesquisar evento",
+						else if(opcaoEvento == 4){
+							int index = index_of_estacionamento("Estacionamentos Disponiveis [Eventos]", estacionamento, global_decor, global_decor_size);
+							if(index == -1){
+								continue;
+							}
+							int ev_index = index_of_evento(index, estacionamento, global_decor, global_decor_size);
+							if(ev_index == -1){
+								continue;
+							}
+							String eventoToSearch = estacionamento.get(index).getEventos().get(ev_index).getNomeEvento();
+							List<Evento> evnts = estacionamento.get(index).getEventos();
+							Evento evento = evnts.get(eventoIndex(evnts,eventoToSearch));
+							if(evento == null){
+								raiseError((evento == null), "O EVENTO "+ eventoToSearch +" NÃO EXISTE", global_decor, global_decor_size);
+								continue;
+							}
+							view_evento(evento);
+							finish(global_decor, global_decor_size);
+							continue;
+						}
+					}
+				} 
+
+				// Sair
+				else if (opcao == 3) { 
 					println("Saindo do sistema!!!");
 					System.exit(0);
 					break;
@@ -1556,15 +850,17 @@ class Main {
 	public static void print(String msg) {
 		System.out.print(msg);
 	}
+
 	public static void println(String msg) {
 		System.out.println(msg);
 	}
+
 	// Limpeza de tela
 	public static void cls() {
-		System.out.print("\033[H\033[2J");
-		System.out.flush();
-		System.out.print("\033[H\033[2J");
-		System.out.flush();
+		for(int i = 0; i < 4; i++){
+			print("\033[H\033[2J");
+			System.out.flush();
+		}
 	}
 
 	// Input de confirmação
@@ -1585,7 +881,8 @@ class Main {
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		print(msg);
-		Float result = sc.nextFloat();
+		Float result;
+		result = sc.nextFloat();
 		return result;
 	}
 
@@ -1593,22 +890,23 @@ class Main {
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		print(msg);
-		int result = sc.nextInt();
+		int result;
+		result = sc.nextInt();
 		return result;
 	}
 
 	// Linha de decoração
-	public static void decor(String chr, int decor_size) {
-		for (int i = 0; i < decor_size; i++) { // Imprime uma quantidade de strings igual ao valor decor_size
-			print(chr);
+	public static void decor(String global_decor, int global_decor_size) {
+		for (int i = 0; i < global_decor_size; i++) { // Imprime uma quantidade de strings igual ao valor global_decor_size
+			print(global_decor);
 		}
 		println(""); // Quebra a linha
-	} // Ex: sy.decor("-=-",9) >>> "-=--=--=-" (Total de 9 digitos)
+	} // Ex: sy.decor(global_decor,9) >>> "-=--=--=-" (Total de 9 digitos)
 
 	// Centralizador de texto
-	public static void centralize(String msg, String chr, int decor_size) {
+	public static void centralize(String msg, String global_decor, int global_decor_size) {
 		// calcula a quantidade de espaços necessária para centralizar a
-		int center = (decor_size * chr.length()) - msg.length(); 
+		int center = (global_decor_size * global_decor.length()) - msg.length(); 
 		
 		// Verifica se o valor do centro é impar, caso seja aumenta o valor uma vez
 		if (center % 2 != 0) { 				
@@ -1619,54 +917,402 @@ class Main {
 			print(" ");
 		}
 		println(msg); // Quebra a linha
-	} // Ex: sy.title("Teste","-=-",9)
+	} // Ex: sy.title("Teste",global_decor,9)
 
 	// Criador de títulos
-	public static void title(String msg, String chr, int decor_size) {
-		decor(chr, decor_size); // Cria um decorador
-		centralize(msg, chr, decor_size); // Centraliza um texto
-		decor(chr, decor_size); // Cria outro decorador
+	public static void title(String msg, String global_decor, int global_decor_size) {
+		decor(global_decor, global_decor_size); // Cria um decorador
+		centralize(msg, global_decor, global_decor_size); // Centraliza um texto
+		decor(global_decor, global_decor_size); // Cria outro decorador
 	}
 
 	// Interagindo com menus
-	public static void printMenu(String msg, String chr, int decor_size, String[] items) {
-		title(msg, chr, decor_size);
+	public static void printMenu(String msg, String global_decor, int global_decor_size, String[] items) {
+		title(msg, global_decor, global_decor_size);
 		for (int i = 0; i < items.length; i++) {
-			System.out.printf("%d - %s\n", i, items[i]);
+			println(i + " - " + items[i]);
 		}
-		decor(chr, decor_size);
+		decor(global_decor, global_decor_size);
 	}
 
-	public static int inputMenu(String msg, String chr, int decor_size, String[] items) {
-		int result = -1; // Inicializa uma variável que representa um valor que vai armazenar o resultado
-											// escolhido pelo usuário
+	public static int inputMenu(String msg, String global_decor, int global_decor_size, String[] items) {
+		int result = -1; // Inicializa uma variável que representa um valor que vai armazenar o resultado escolhido pelo usuário
 		do {
 			cls(); // Limpa tela
-			printMenu(msg, chr, decor_size, items); // Printa um menu
-			result = int_input("> "); // Solicita o input de um usuário
+			printMenu(msg, global_decor, global_decor_size, items); // Printa um menu
+			try{
+				result = int_input("> "); // Solicita o input de um usuário
+				raiseError(
+					(result > items.length - 1 || result < 0),
+					"OPÇÃO INVÁLIDA",
+					global_decor,
+					global_decor_size
+				);
+				break;
+			} catch (Exception  e){
+				raiseError(true, "O VALOR PRECISA SER UM NÚMERO INTEIRO", global_decor, global_decor_size);
+				continue;
+			}
 			// Cria algo parecido com uma Exception
-			raiseError(
-				(result > items.length || result < 0),
-				"OPÇÃO INVÁLIDA",
-				chr,
-				decor_size
-			);
-		} while (result > items.length - 1 || result < 0); // Enquanto o input for maior que a quantidade de items ou menor
-																												// do que 0 o loop vai continuar
-		return result; // Retorna o resultado da função como um valor inteiro para ser utilizado em um
-										// switch case ou qualquer outra coisa.
+		} while (result > items.length - 1 || result < 0); // Enquanto o input for maior que a quantidade de items ou menor do que 0 o loop vai continuar
+		return result; // Retorna o resultado da função como um valor inteiro para ser utilizado em um switch case ou qualquer outra coisa.
 	}
 
-	public static void raiseError(Boolean condition, String msg, String decor, int decor_size) {
+	public static Boolean raiseError(Boolean condition, String msg, String global_decor, int global_decor_size) {
 		if (condition) {
-			title(msg, decor, decor_size);
+			title(msg, global_decor, global_decor_size);
 			ok();
 		}
+		return condition;
 	}
 	
-	public static void printAllEstacionamentos(List<Estacionamento> list){
-		for (int i = 0; i < list.size(); i++) {
-			println(list.get(i).getNome());
+	public static boolean printAllEstacionamentos(List<Estacionamento> list, String global_decor, int global_decor_size){
+		if(list.isEmpty()/*raiseError(list.isEmpty(), "Nenhum Estacionamento foi criado!!!", global_decor, global_decor_size)*/){
+			return false;
+		} else {
+			for (int i = 0; i < list.size(); i++) {
+				println("> " + list.get(i).getNome());
+			}
+			return true;
 		}
+	}
+
+	public static int estacionamentoIndex(List<Estacionamento> estacionamento,String nome){
+		int index = -1;
+		for (int i = 0; i < estacionamento.size(); i++) {
+			if (estacionamento.get(i).getNome().equals(nome)) {
+				index = i;
+			}
+		}
+		return index;
+	}
+
+	public static int eventoIndex(List<Evento> evento,String nome){
+		int index = -1;
+		for (int i = 0; i < evento.size(); i++) {
+			if (evento.get(i).getNomeEvento().equals(nome)) {
+				index = i;
+			}
+		}
+		return index;
+	}
+
+	public static int acessoIndex(List<Acesso> acesso,String nome){
+		int index = -1;
+		for (int i = 0; i < acesso.size(); i++) {
+			if (acesso.get(i).getPlaca().equals(nome)) {
+				index = i;
+			}
+		}
+		return index;
+	}
+
+	public static int acessoEventoIndex(List<AcessoEvento> acesso,String nome){
+		int index = -1;
+		for (int i = 0; i < acesso.size(); i++) {
+			if (acesso.get(i).getPlaca().equals(nome)) {
+				index = i;
+			}
+		}
+		return index;
+	}
+
+	public static void finish(String global_decor, int global_decor_size){
+		decor(global_decor, global_decor_size);
+		ok();
+	}
+
+	public static void view_cad(String msg,String global_decor, int global_decor_size, Map<String,String> items){
+		cls();
+		title("Estacionamento", global_decor, global_decor_size);
+		for(Map.Entry<String, String> item : items.entrySet()){
+			println("> " + item.getKey() + ": " + item.getValue());
+		}
+		decor(global_decor, global_decor_size);
+	}
+
+	public static String input_str_view_cad(String input_msg, String msg,String global_decor, int global_decor_size, Map<String,String> items){
+		String result;
+		while(true){
+			view_cad(msg,global_decor, global_decor_size, items);
+			result = input(input_msg);
+			if(empty_str(result,"-=-",15)){
+				continue;
+			}
+			break;
+		}	
+		return result;
+	}
+
+	public static int input_int_view_cad(String input_msg, String msg,String global_decor, int global_decor_size, Map<String,String> items){
+		int result;
+		while(true){
+			try{
+				view_cad(msg,global_decor, global_decor_size, items);
+				result = int_input(input_msg);
+				if(result <= 0){
+					raiseError((result <= 0),"O VALOR PRECISA SER MAIOR DO QUE ZERO", global_decor, global_decor_size);
+					continue;
+				}
+				break;
+			} catch (Exception e) {
+				raiseError(true, "O VALOR PRECISA SER UM NÚMERO INTEIRO!", global_decor, global_decor_size);
+			}
+		}	
+		return result;
+	}
+
+	public static float input_float_view_cad(String input_msg, String msg, String global_decor, int global_decor_size, Map<String,String> items){
+		float result;
+		while(true){
+			try{
+				view_cad(msg,global_decor, global_decor_size, items);
+				result = float_input(input_msg);
+				if(result <= 0){
+					raiseError((result <= 0),"O VALOR PRECISA SER MAIOR DO QUE ZERO", global_decor, global_decor_size);
+					continue;
+				}
+				break;
+			} catch (Exception e) {
+				raiseError(true, "O VALOR PRECISA SER UM NÚMERO!", global_decor, global_decor_size);
+			}
+		}	
+		return result;
+	}
+
+	public static String int_str(int num){
+		return String.valueOf(num);
+	}
+
+	public static String float_str(float num){
+		return String.valueOf(num);
+	}
+
+	public static boolean unique_string(String str,List<String> list){
+		boolean unique = true;
+		for(String i:list){
+			if(str.equalsIgnoreCase(i)){
+				return false;
+			}
+		}
+		return unique;
+	}
+
+	public static List<String> get_nomes(List<Estacionamento> estacionamento){
+		List<String> nomes = new ArrayList<String>();
+		for(int i = 0; i < estacionamento.size(); i++){
+			nomes.add(estacionamento.get(i).getNome());
+		}
+		return nomes;
+	}
+
+	public static List<String> get_nomes_eventos(List<Evento> eventos){
+		List<String> nomes = new ArrayList<String>();
+		for(int i = 0; i < eventos.size(); i++){
+			nomes.add(eventos.get(i).getNomeEvento());
+		}
+		return nomes;
+	}
+
+	public static List<String> get_nomes_acessos(List<Acesso> acessos){
+		List<String> nomes = new ArrayList<String>();
+		for(int i = 0; i < acessos.size(); i++){
+			nomes.add(acessos.get(i).getPlaca());
+		}
+		return nomes;
+	}
+
+	public static List<String> get_nomes_acessoseventos(List<AcessoEvento> acessos){
+		List<String> nomes = new ArrayList<String>();
+		for(int i = 0; i < acessos.size(); i++){
+			nomes.add(acessos.get(i).getPlaca());
+		}
+		return nomes;
+	}
+
+	public static void view_acesso(Acesso acesso){
+		println("Placa: " + acesso.getPlaca());
+		println("Começo: " + acesso.getDataHoraEntrada());
+		println("Fim: " + acesso.getDataHoraSaida());
+		println("Estacionado: " + acesso.getMinutosEstacionados());
+	}
+
+	public static void view_evento(Evento evento){
+		println("Nome: " + evento.getNomeEvento());
+		println("Começo: " + evento.getDataHoraEventoInicio());
+		println("Fim: " + evento.getDataHoraEventoFim());
+		println("Valor: " + evento.getValorEvento());
+	}
+
+	public static void view_acessoevento(AcessoEvento acessoEventos){
+		println("Acesso");
+		println("Placa: " + acessoEventos.getPlaca());
+		println("Começo: " + acessoEventos.getDataHoraEntrada());
+		println("Fim: " + acessoEventos.getDataHoraSaida());
+		println("Estacionado: " + acessoEventos.getMinutosEstacionados());
+		println("Evento");
+		view_evento(acessoEventos.getEvento());
+	}
+
+	public static boolean view_eventos_details(List<Evento> eventos){
+		if(eventos.size() == 0){
+			return false;
+		}
+		for(Evento i: eventos){
+			view_evento(i);
+			println("");
+		}
+		return true;
+	}
+
+	public static boolean view_acessos_details(List<Acesso> acessos){
+		if(acessos.size() == 0){
+			return false;
+		}
+		for(Acesso i: acessos){
+			view_acesso(i);
+			println("");
+		}
+		return true;
+	}
+
+	public static boolean view_acessoevento_details(List<AcessoEvento> acessosEventos){
+		if(acessosEventos.size() == 0){
+			return false;
+		}
+		for(AcessoEvento i: acessosEventos){
+			view_acessoevento(i);
+			println("");
+		}
+		return true;
+	}
+
+	public static boolean empty_str(String str,String global_decor,int global_decor_size){
+		return raiseError(str.equalsIgnoreCase(" ") || str.isEmpty(),"ESTE CAMPO NÃO PODE SER VAZIO",global_decor,global_decor_size);
+	}
+
+	public static boolean title_for_estacionamentos(String msg,List<Estacionamento> estacionamento, String global_decor, int global_decor_size){
+		cls();
+		title(msg, global_decor, global_decor_size);
+		boolean result = printAllEstacionamentos(estacionamento, global_decor, global_decor_size);
+		if(result){
+			decor(global_decor, global_decor_size);
+		}
+		raiseError(!result, "Nenhum estacionamento cadastrado", global_decor, global_decor_size);
+		return result;
+	}
+
+	public static int index_of_estacionamento(String msg,List<Estacionamento> estacionamento, String global_decor, int global_decor_size){
+		String search = "";
+		boolean unique = true;
+		int index;
+		while(unique){
+			if(!title_for_estacionamentos(msg, estacionamento, global_decor, global_decor_size)){
+				return -1;
+			}
+			search = input("Insira o nome do estacionamento\n> ");
+			unique = unique_string(search, get_nomes(estacionamento));
+			raiseError(unique, "O ESTACIONAMENTO DIGITADO NÃO EXISTE", global_decor, global_decor_size);
+		}
+		decor(global_decor, global_decor_size);
+		index = estacionamentoIndex(estacionamento, search);
+		return index;
+	}
+
+	public static int index_of_evento(int index, List<Estacionamento> estacionamento, String global_decor, int global_decor_size){
+		List<Evento> eventos = estacionamento.get(index).getEventos();
+		int len = eventos.size();
+		boolean unique = true;
+		String search = "";
+		int ev_index;
+		while(unique){
+			if(len == 0){
+				raiseError(true,"Nenhum Evento foi criado!!!",global_decor,global_decor_size);
+				return -1;
+			}
+			cls();
+			title("Eventos disponiveis [Estacionamento: " + estacionamento.get(index).getNome() + "]", global_decor, global_decor_size);
+			if(!view_eventos_details(eventos)){
+				return -1;
+			}
+			decor(global_decor, global_decor_size);
+			search = input("Insira o nome do evento\n> ");
+			unique = unique_string(search, get_nomes_eventos(eventos));
+		}
+		finish(global_decor, global_decor_size);
+		ev_index = eventoIndex(eventos,search);
+		return ev_index;
+	}
+
+	public static int index_of_acesso(int index, List<Estacionamento> estacionamento, String global_decor, int global_decor_size){
+		List<Acesso> acessos = estacionamento.get(index).getAcessos();
+		int len = acessos.size();
+		boolean unique = true;
+		String search = "";
+		int ac_index;
+		while(unique){
+			if(len == 0){
+				raiseError(true,"Nenhum Acesso foi criado!!!",global_decor,global_decor_size);
+				return -1;
+			}
+			cls();
+			title("Acessos disponiveis [Estacionamento: " + estacionamento.get(index).getNome() + "]", global_decor, global_decor_size);
+			if(!view_acessos_details(acessos)){
+				return -1;
+			}
+			decor(global_decor, global_decor_size);
+			search = input("Insira a placa do acesso\n> ");
+			unique = unique_string(search, get_nomes_acessos(acessos));
+		}
+		finish(global_decor, global_decor_size);
+		ac_index = acessoIndex(acessos,search);
+		return ac_index;
+	}
+
+	public static int index_of_acesso_evento(Evento evento, String global_decor, int global_decor_size){
+		List<AcessoEvento> acessos = evento.getAcessoEventos();
+		boolean unique = true;
+		String search = "";
+		int ac_index;
+		while(unique){
+			if(raiseError(acessos.size() == 0, "NÃO EXISTEM ACESSOS CADASTRADOS", global_decor, global_decor_size)){
+				return -1;
+			}
+			cls();
+			title("ACESSOS EVENTOS DISPONÍVEIS", global_decor, global_decor_size);
+			if(!view_acessoevento_details(acessos)){
+				return -1;
+			}
+			decor(global_decor, global_decor_size);
+			search = input("Insira a placa do acesso\n> ");
+			unique = unique_string(search, get_nomes_acessoseventos(acessos));
+		}
+		finish(global_decor, global_decor_size);
+		ac_index = acessoEventoIndex(acessos,search);
+		return ac_index;
+	}
+
+	public static Evento get_evento(Estacionamento estacionamento, String nome){
+		List<Evento> eventos = estacionamento.getEventos();
+		for(int i = 0; i < eventos.size(); i++){
+			if(nome.equals(eventos.get(i).getNomeEvento())){
+				return eventos.get(i);
+			}
+		}
+		return null;
+	}
+
+	public static String unique_valid_string(boolean condition,String title, String msg,String global_decor, int global_decor_size){
+		String str = "";
+		while(condition){
+			cls();
+			title(title, global_decor, global_decor_size);
+			str = input(msg);
+			if(empty_str(str,global_decor,global_decor_size)){
+				continue;
+			}
+			break;
+		}
+		return str;
 	}
 }
